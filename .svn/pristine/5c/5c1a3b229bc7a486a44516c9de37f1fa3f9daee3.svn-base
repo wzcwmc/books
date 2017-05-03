@@ -1,0 +1,57 @@
+package com.servlet;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.biz.BookBiz;
+import com.biz.impl.BookBizImpl;
+import com.entity.Book;
+
+public class UpdateServlet extends HttpServlet {
+
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5173846545005594014L;
+
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		request.setCharacterEncoding("UTF-8");
+
+		System.out.println("233434");
+		int bookId=0;
+		String type=request.getParameter("type");
+		System.out.println(type);
+		if(type.equals("book"))
+		{
+			if(request.getParameter("bookId")!=null)
+			{
+				bookId=Integer.parseInt(request.getParameter("bookId"));
+				System.out.println(bookId);
+			}
+			BookBiz bookBiz= new BookBizImpl();
+			Book book=bookBiz.getBookById(bookId);
+			if(book!=null)
+			{
+				request.setAttribute("book", book);
+				request.getRequestDispatcher("bookDetails.jsp").forward(request, response);
+			}
+		}
+	}
+
+	
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		
+	}
+		
+//	}
+
+}

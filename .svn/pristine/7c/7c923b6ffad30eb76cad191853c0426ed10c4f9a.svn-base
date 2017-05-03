@@ -1,0 +1,56 @@
+package com.servlet;
+
+import java.io.IOException;
+import java.util.Date;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+
+import com.entity.Reader;
+
+
+public class RepwdServlet extends HttpServlet {
+
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		doPost(request, response);
+	}
+
+	
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		request.setCharacterEncoding("UTF-8");
+		
+		String loginId=request.getParameter("loginId");
+		String reaName=request.getParameter("reaName");
+		String gender=request.getParameter("gender");
+		Date birthday=java.sql.Date.valueOf(request.getParameter("birthday"));
+		String loginpwd=request.getParameter("loginPwd");
+		
+		Reader reader=new Reader();
+		if(reader.getLoginId().equals(loginId)&&
+				reader.getReaName().equals(reaName)&&
+					reader.getGender().equals(gender)&&
+						reader.getBirthday().equals(birthday))
+		{
+			reader.setLoginPwd(loginpwd);
+		}else{
+			System.out.println("输入信息有误!请重新输入");
+			response.sendRedirect("repwd.jsp");
+		}
+		
+	}
+
+}

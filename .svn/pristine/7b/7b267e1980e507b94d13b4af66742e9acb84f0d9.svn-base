@@ -1,0 +1,70 @@
+package com.servlet;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import net.sf.json.JSONArray;
+
+import com.biz.BookBiz;
+import com.biz.MarkBiz;
+import com.biz.ReaderBiz;
+import com.biz.impl.BookBizImpl;
+import com.biz.impl.MarkBizIpml;
+import com.biz.impl.ReaderBizImpl;
+import com.entity.Book;
+import com.entity.Mark;
+import com.entity.Reader;
+
+public class PageServlet extends HttpServlet {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7490407376401016901L;
+
+	
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		doPost(request, response);
+	}
+
+	
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		PrintWriter out = response.getWriter();
+		
+		String type = request.getParameter("type");
+		int pageIndex=Integer.parseInt(request.getParameter("start"));
+		int pageSize=Integer.parseInt(request.getParameter("pageSize"));
+		
+		if (type.equals("mark")) {
+			MarkBiz mBiz = new MarkBizIpml();
+			List<Mark> mList = mBiz.getMarkAll(pageIndex, pageSize);
+			JSONArray jsonArr=JSONArray.fromObject(mList);
+			out.write(jsonArr.toString());
+		}else if (type.equals("reader")) {
+			ReaderBiz rBiz = new ReaderBizImpl();
+			List<Reader> rList = rBiz.getReaderAll(pageIndex, pageSize);
+			JSONArray jsonArr=JSONArray.fromObject(rList);
+			out.write(jsonArr.toString());
+		}else if (type.equals("book")) {
+			BookBiz bBiz = new BookBizImpl();
+			List<Book> bList = bBiz.getBookAll(pageIndex, pageSize);
+			JSONArray jsonArr=JSONArray.fromObject(bList);
+			out.write(jsonArr.toString());
+		}
+		
+		
+		out.flush();
+		out.close();
+	}
+
+}

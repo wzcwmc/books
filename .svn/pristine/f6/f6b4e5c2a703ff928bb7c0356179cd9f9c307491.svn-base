@@ -1,0 +1,51 @@
+package com.servlet;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Date;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.biz.ReaderBiz;
+import com.biz.impl.ReaderBizImpl;
+
+public class readerRegisterServlet extends HttpServlet {
+
+	
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		doPost(request, response);
+	}
+
+	
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
+		
+		String username=request.getParameter("reaName");
+		String userId=request.getParameter("loginId");
+		String userPwd=request.getParameter("loginPwd");
+		String userRePwd=request.getParameter("reloginPwd");
+		Date userBirthday=Date.valueOf(request.getParameter("birthday"));
+		String userAddress=request.getParameter("address");
+		String userPhone=request.getParameter("phone");
+		String userGender=request.getParameter("gender");
+		
+		
+		ReaderBiz readerBiz=new ReaderBizImpl();
+		
+		
+		
+		
+		
+		
+		
+	}
+
+}

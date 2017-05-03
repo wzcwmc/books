@@ -1,0 +1,155 @@
+package com.servlet;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+
+import com.biz.BookBiz;
+import com.biz.impl.BookBizImpl;
+import com.entity.Book;
+
+public class DoUpdateServlet extends HttpServlet {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1089699530064351529L;
+
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		doPost(request, response);
+
+	}
+
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
+
+		BookBiz biz = new BookBizImpl();
+		String bookImg = request.getParameter("bookImg");
+
+		DiskFileItemFactory factory = new DiskFileItemFactory();
+		ServletFileUpload upload = new ServletFileUpload(factory);
+
+		List items = null;
+		try {
+			items = upload.parseRequest(request);
+		} catch (FileUploadException e) {
+			e.printStackTrace();
+		}
+
+		Iterator iter = items.iterator();
+		Map<String, String> mapList = new HashMap<String, String>();
+		Book book = new Book();
+		while (iter.hasNext()) {
+			FileItem item = (FileItem) iter.next();
+			if (item.isFormField()) {
+				// 如果是表单域，就是非文件上传元素
+				String name = item.getFieldName();// 获取name属性的值
+
+				String value = item.getString();// 获取value属性的值
+
+				value = new String(value.getBytes("ISO-8859-1"), "UTF-8");
+				mapList.put(name, value);
+
+			} else {
+				// 就是上传图片
+				String fieldName = item.getFieldName();
+
+				String fileName = item.getName();
+				if (fileName == null || fileName.length() == 0) {
+					book.setBookImg(bookImg);
+				} else {
+					String contentType = item.getContentType();
+
+					long size = item.getSize();
+
+					String fix = fileName
+							.substring(fileName.lastIndexOf(".") + 1);
+
+					Date nowDate = new Date();
+					SimpleDateFormat sdf = new SimpleDateFormat("yyMMddhhmmss");
+					fileName = sdf.format(nowDate);
+					fileName += System.currentTimeMillis();
+					fileName += "." + fix;
+
+					String savePath = request.getSession().getServletContext()
+							.getRealPath("/")
+							+ "bookface/";
+					File file = new File(savePath + fileName);
+					try {
+						item.write(file);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					mapList.put(fieldName, "bookface/" + fileName);
+				}
+			}
+		}
+
+		if (mapList.size() > 0) {
+			for (String key : mapList.keySet()) {
+				if (key.equals("bookId")) {
+					book.setBookId(Integer.parseInt(mapList.get(key)));
+				} else if (key.equals("isbn")) {
+					book.setIsbn(mapList.get(key));
+				} else if (key.equals("bookName")) {
+					book.setBookName(mapList.get(key));
+				} else if (key.equals("author")) {
+					book.setAuthor(mapList.get(key));
+				} else if (key.equals("publisher")) {
+					book.setPublisher(mapList.get(key));
+				} else if (key.equals("pubDate")) {
+					book.setPubDate(java.sql.Date.valueOf(mapList.get(key)));
+				} else if (key.equals("bookType")) {
+					book.setBookType(mapList.get(key));
+				} else if (key.equals("introduction")) {
+					book.setIntroduction(mapList.get(key));
+				} else if (key.equals("price")) {
+					book.setPrice(mapList.get(key));
+				} else if (key.equals("bookNum")) {
+					book.setBookNum(Integer.parseInt(mapList.get(key)));
+				} else if (key.equals("lendNum")) {
+					book.setLendNum(Integer.parseInt(mapList.get(key)));
+				} else if (key.equals("bookImg")) {
+					book.setBookImg(mapList.get(key));
+				} else if (key.equals("innerDate")) {
+					book.setInnerDate(java.sql.Date.valueOf(mapList.get(key)));
+				}
+			}
+			book.setNowNum(book.getBookNum() - book.getLendNum());
+		}
+
+		int res = biz.updateBook(book, book.getBookId());
+		if (res > 0) {
+			PrintWriter out = response.getWriter();
+			out.write("<script type='text/javascript'>alert('更新成功O(∩_∩)O');location.href='adminShow.html';</script>");
+		} else {
+			PrintWriter out = response.getWriter();
+			out.write("<script type='text/javascript'>alert('更新期间发生不可预知错误');location.href='adminShow.html';</script>");
+			// response.sendRedirect("addBook.html");
+			out.flush();
+			out.close();
+		}
+	}
+
+}

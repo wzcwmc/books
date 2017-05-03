@@ -1,0 +1,156 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%
+String path = request.getContextPath();
+String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+%>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <base href="<%=basePath%>">
+    
+    <title>Mini DBMS readerIndex.jsp </title>
+    
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="expires" content="0">    
+	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+	<meta http-equiv="description" content="This is my page">
+	<!-- jQuery AND jQueryUI -->
+<script type="text/javascript" src="js/libs/jquery/1.6/jquery.min.js"></script>
+<script type="text/javascript" src="js/libs/jqueryui/1.8.13/jquery-ui.min.js"></script>
+
+<link rel="stylesheet" href="css/min.css" />
+<script type="text/javascript" src="js/min.js"></script>
+<script type="text/javascript" src="content/settings/main.js"></script>
+<link rel="stylesheet" href="content/settings/style.css" />
+
+
+	<script type="text/javascript">
+		window.onload=function(){
+			var user = document.getElementById("user").innerText;
+			if(user==""){
+				location="readerLogin.html";
+			};
+		};
+	</script>
+	
+</head>
+  
+  <body>
+  
+<!--              
+                HEAD
+                        -->
+<div id="head">
+	<div class="left"> <a href="#" class="button profile"><img src="img/icons/top/huser.png" alt="" /></a>
+		 Hi, <a href="#" id="user">${sessionScope.user.loginId }</a> | <a href="ExitServlet?type=reader" id="exit">退出</a> </div>
+	<div class="right">
+		<form action="#" id="search" class="search placeholder">
+			<label> 搜搜看 总有你需要的 O(∩_∩)O </label>
+			<input type="text" value="" name="q" class="text"/>
+			<input type="submit" value="rechercher" class="submit"/>
+		</form>
+	</div>
+</div>
+
+<!--            
+                SIDEBAR
+                         -->
+<div id="sidebar">
+	<ul>
+		<li class="current"> <a href="IndexServlet?user=reader"> <img src="img/icons/menu/inbox.png" alt="" /> Mini 书屋 </a> </li>
+		<li><a href="#"><img src="img/icons/menu/layout.png" alt="" />我的书屋</a>
+			<ul>
+				<li><a href="readerShow.html">图书信息</a></li>
+				<li><a href="readerMark.html">我的记录</a></li>
+			</ul>
+		</li>
+		<li><a href="#"><img src="img/icons/menu/brush.png" alt="" /> 查询</a>
+			<ul>
+				<li><a href="search.html"> 查询图书</a></li>
+				<li><a href="#"> 未来功能 3Q</a></li>
+				<li><a href="#"> 未来功能 3Q</a></li>
+			</ul>
+		</li>
+		<li><a href="#"><img src="img/icons/menu/brush.png" alt="" /> 未来功能 3Q</a>
+			<ul>
+				<li><a href="#"> 未来功能 3Q</a></li>
+				<li><a href="#"> 未来功能 3Q</a></li>
+				<li><a href="#"> 未来功能 3Q</a></li>
+			</ul>
+		</li>
+	</ul>
+</div>
+
+<!--            
+              CONTENT 
+                        -->
+<div id="content" class="white">
+	<h1><img src="img/icons/dashboard.png" alt="" /> Mini 书屋首页 </h1>
+	<div class="bloc left">
+		<div class="title"> 馆长推荐 </div>
+		<div class="content dashboard">
+			<div class="center">
+				<c:forEach items="${requestScope.listOne }" var="book">
+				<img  class="shortcut last"  src="${book.bookImg }" alt="图片暂无" title="${book.bookName }" />
+				</c:forEach>
+				<div class="cb"></div>
+			</div>
+			<p>Icons by <a href="#">icondrawer.com</a></p>
+		</div>
+	</div>
+	<div class="bloc right">
+		<div class="title"> 新书上架 </div>
+		<div class="content">
+			<div class="left">
+				<table class="noalt">
+					<thead>
+						<tr>
+							<th><em>书名</em></th>
+							<th><em>类型</em></th>
+						</tr>
+					</thead>
+					<tbody>
+						<c:forEach items="${listTwo }" var="book">
+							<tr>
+								<td style="font: italic 18px '楷体';">${book.bookName }</td>
+								<td style="font: 16px '仿宋';">${book.bookType }</td>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
+			</div>
+			<div class="right">
+				<table class="noalt">
+					<thead>
+						<tr>
+							<th><em>作者</em></th>
+							<th><em>进屋日期</em></th>
+						</tr>
+					</thead>
+					<tbody>
+						<c:forEach items="${listTwo }" var="book">
+							<tr>
+								<td style="font: 14px '叶根友毛笔行书2.0版';">${book.author }</td>
+								<td style="font: 14px 'Times New Roman';">${book.innerDate }</td>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
+			</div>
+			<div class="cb"></div>
+		</div>
+	</div>
+	<div class="cb"></div>
+	
+	<div class="bloc">
+		<div class="title"> Mini 书屋公告</div>
+		<div class="content"> <a href="#" class="shortcut"> <img src="img/icons/font.png" alt="" /> Typography </a> <a href="#" class="shortcut"> <img src="img/icons/window.png" alt=""  width="32" height="32"/> Table </a> <a href="#" class="shortcut"> <img src="img/icons/warning.png" alt=""  width="32" height="32"/> Notifications </a> <a href="#" class="shortcut"> <img src="img/icons/posts.png" alt=""  width="32" height="32"/> Forms </a> <a href="#" class="shortcut"> <img src="img/icons/chart.png" alt=""  width="32" height="32"/> Charts </a> <a href="#" class="shortcut"> <img src="img/icons/calendar.png" alt=""  width="32" height="32"/> Calendar </a>
+			<div class="cb"></div>
+		</div>
+	</div>
+</div>
+  </body>
+</html>

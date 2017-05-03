@@ -1,0 +1,251 @@
+package com.dao.impl;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.dao.BookDao;
+import com.entity.Book;
+import com.utils.DBUtils;
+import com.utils.DateToDate;
+
+public class BookDaoImpl implements BookDao {
+
+	
+	
+	private Connection conn =null;
+	private PreparedStatement psmt=null;
+	private ResultSet rs=null;
+    DBUtils dbu= new DBUtils();
+	
+	@Override
+	public List<Book> getBookBySQL(String sql, Object... obj) {
+		List<Book> list= new ArrayList<Book>();
+		conn=dbu.getConn();
+		try {
+			psmt=conn.prepareStatement(sql);
+			if(obj.length>0){
+				for (int i = 0; i < obj.length; i++) {
+					psmt.setObject(i+1,obj[i]);
+				}
+			}
+			rs=psmt.executeQuery();
+			while(rs.next())
+			{
+				Book book =new Book();
+				book.setBookId(rs.getInt("bookId"));
+				book.setIsbn(rs.getString("isbn"));
+				book.setBookName(rs.getString("bookName"));
+				book.setAuthor(rs.getString("author"));
+				book.setPublisher(rs.getString("publisher"));
+				book.setPubDate(DateToDate.toUtilDate(rs.getDate("pubDate")));
+				book.setBookType(rs.getString("bookType"));
+				book.setIntroduction(rs.getString("introduction"));
+				book.setPrice(rs.getString("price"));
+				book.setBookNum(rs.getInt("bookNum"));
+				book.setLendNum(rs.getInt("lendNum"));
+				book.setNowNum(rs.getInt("nowNum"));
+				book.setBookImg(rs.getString("bookImg"));
+				book.setInnerDate(DateToDate.toUtilDate(rs.getDate("innerDate")));
+				list.add(book);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally{
+			dbu.closeAll(rs, psmt, conn);
+		}
+		return list;
+	}
+
+	@Override
+	public List<Book> getBookByName(String bookName) {
+		StringBuffer sb= new StringBuffer();
+		sb.append(" select bookid, isbn, bookname, author, publisher, ");
+		sb.append(" pubdate, booktype, introduction, price, booknum,  ");
+		sb.append(" lendnum, nownum, bookimg,innerdate from book ");
+		sb.append(" where bookname like '%'||?||'%' ");
+		return getBookBySQL(sb.toString(), bookName);
+	}
+
+	@Override
+	public List<Book> getBookBytype(String bookType,int pageIndex, int pageSize) {
+		StringBuffer sb= new StringBuffer();
+		sb.append(" select * ");
+		sb.append(" from (select *  ");
+		sb.append(" from(select b.*,rownum as rowno ");
+		sb.append(" from book b where booktype like '%Í¯»°%' )bb ");
+		sb.append(" where rowno < = ");
+		sb.append(pageIndex*pageSize);
+		sb.append(" )where rowno >= ");
+		sb.append((pageIndex-1)*pageSize+1);
+		return getBookBySQL(sb.toString(), bookType);
+	}
+
+
+	@Override
+	public List<Book> getBookByString(String str, int pageIndex, int pageSize) {
+		
+		StringBuffer sb= new StringBuffer();
+		sb.append(" select *  from (select bb.*, rownum as rowno  ");
+		sb.append(" from ( select b.* from book b ");
+		sb.append(" where bookname like '%'||?||'%' or booktype like '%'||?||'%' ");
+		sb.append(" order by b.innerdate desc) bb ");
+		sb.append(" where rownum <= ");
+		sb.append(pageIndex*pageSize);
+		sb.append(" ) bbb where bbb.rowno >= ");
+		sb.append((pageIndex-1)*pageSize+1);
+		
+		Object [] obj = {str,str};
+		return getBookBySQL(sb.toString(), obj);
+	}
+	
+
+	@Override
+	public Book getBookById(int bookId) {
+		List<Book> list = new ArrayList<Book>();
+		StringBuffer sb= new StringBuffer();
+		sb.append(" select bookid, isbn, bookname, author, publisher, ");
+		sb.append(" pubdate, booktype, introduction, price, booknum,  ");
+		sb.append(" lendnum, nownum, bookimg, innerdate from book ");
+		sb.append(" where bookid = ? ");
+		list=getBookBySQL(sb.toString(), bookId);
+		if (list.size()>0) {
+			return list.get(0);
+		}
+		return null;
+	}
+	
+	@Override
+	public List<Book> getBookByLendNum() {
+		StringBuffer sb= new StringBuffer();
+		sb.append(" select * from ( ");
+		sb.append(" select bookid, isbn, bookname, author, publisher, ");
+		sb.append(" pubdate, booktype, introduction, price, booknum, ");
+		sb.append(" lendnum, nownum, bookimg, innerdate,rownum as rno ");
+		sb.append(" from book order by lendnum desc ) bb ");
+		sb.append(" where rno between 1 and 4 ");
+		return getBookBySQL(sb.toString());
+	}
+
+	@Override
+	public List<Book> getBookByInnerDate() {
+		StringBuffer sb= new StringBuffer();
+		sb.append(" select * from ( ");
+		sb.append(" select bookid, isbn, bookname, author, publisher, ");
+		sb.append(" pubdate, booktype, introduction, price, booknum, ");
+		sb.append(" lendnum, nownum, bookimg, innerdate,rownum as rno ");
+		sb.append(" from book order by innerdate desc ) bb ");
+		sb.append(" where rno between 1 and 7 ");
+		return getBookBySQL(sb.toString());
+		
+	}
+
+	@Override
+	public List<Book> getBookAll(int pageIndex, int pageSize) {
+		StringBuffer sb= new StringBuffer();
+		sb.append(" select * from (select bb.*, rownum as rowno ");
+		sb.append(" from ( select b.* from book b ");
+		sb.append(" order by b.innerdate desc) bb ");
+		sb.append(" where rownum <= ");
+		sb.append(pageIndex*pageSize);
+		sb.append(" ) bbb where bbb.rowno >= ");
+		sb.append((pageIndex-1)*pageSize+1);
+		return getBookBySQL(sb.toString());
+	}
+
+	@Override
+	public int getBookCounts() {
+		int count=0;
+		String sql=" select count(0) as rowno from book ";
+		conn=dbu.getConn();
+		try {
+			psmt= conn.prepareStatement(sql);
+			rs=psmt.executeQuery();
+			if(rs.next())
+			{
+				count=rs.getInt("rowno");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally{
+			dbu.closeAll(rs, psmt, conn);
+		}
+		return count;
+	}
+
+	@Override
+	public int addBook(Book book) {
+		StringBuffer sb= new StringBuffer();
+		sb.append(" insert into book ");
+		sb.append(" ( isbn, bookname, author, publisher, pubdate, booktype, ");
+		sb.append(" introduction, price, booknum, lendnum, nownum, bookimg, innerdate) ");
+		sb.append(" values (?, ?, ?, ?,  ?, ?, ?, ?, ?,?, ?, ?, ?) ");
+		Object [] obj={book.getIsbn(),book.getBookName(),book.getAuthor(),
+				book.getPublisher(),book.getPubDate(),book.getBookType(),
+				book.getIntroduction(),book.getPrice(),book.getBookNum(),
+				book.getLendNum(),book.getNowNum(),book.getBookImg(),
+				book.getInnerDate()};
+		return dbu.executeUpdate(sb.toString(), obj);
+	}
+
+	@Override
+	public int deleteBook(int bookId) {
+		String sql="delete book where bookid = ? ";
+		return dbu.executeUpdate(sql, bookId);
+	}
+
+	@Override
+	public int updateBook(Book book,int bookId) {
+		StringBuffer sb= new StringBuffer();
+		sb.append(" update book ");
+		sb.append(" set isbn = ?,bookname = ?,author = ?,publisher = ?, ");
+		sb.append(" pubdate = ?,booktype = ?,introduction = ?,price = ?, ");
+		sb.append(" booknum = ?,lendnum = ?, nownum = ?, bookimg = ?, ");
+		sb.append(" innerdate = ?where bookid = ? ");
+		Object [] obj={book.getIsbn(),book.getBookName(),book.getAuthor(),
+				book.getPublisher(),book.getPubDate(),book.getBookType(),
+				book.getIntroduction(),book.getPrice(),book.getBookNum(),
+				book.getLendNum(),book.getNowNum(),book.getBookImg(),
+				book.getInnerDate(),bookId};
+		return dbu.executeUpdate(sb.toString(), obj);
+	}
+
+	@Override
+	public Book getBookByIsbn(String Isbn) {
+		List<Book> list = new ArrayList<Book>();
+		StringBuffer sb= new StringBuffer();
+		sb.append(" select bookid, isbn, bookname, author, publisher, ");
+		sb.append(" pubdate, booktype, introduction, price, booknum,  ");
+		sb.append(" lendnum, nownum, bookimg, innerdate from book ");
+		sb.append(" where isbn = ? ");
+		list=getBookBySQL(sb.toString(), Isbn);
+		if (list.size()>0) {
+			return list.get(0);
+		}
+		return null;
+	}
+
+	@Override
+	public int getCountsBybookType(String bookType) {
+		int count=0;
+		String sql=" select count(0) as rowno from book where booktype like like '%'||?||'%' ";
+		conn=dbu.getConn();
+		try {
+			psmt= conn.prepareStatement(sql);
+			psmt.setString(1, bookType);
+			rs=psmt.executeQuery();
+			if(rs.next())
+			{
+				count=rs.getInt("rowno");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally{
+			dbu.closeAll(rs, psmt, conn);
+		}
+		return count;
+	}
+}

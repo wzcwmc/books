@@ -1,0 +1,55 @@
+package com.servlet;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import net.sf.json.JSONArray;
+
+import com.biz.MarkBiz;
+import com.biz.impl.MarkBizIpml;
+import com.entity.Mark;
+
+public class MarkPageServlet extends HttpServlet {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7825534843785258986L;
+
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		doPost(request, response);
+	}
+
+	
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
+		PrintWriter out = response.getWriter();
+		
+		MarkBiz markBiz =new MarkBizIpml();
+		
+		int pageIndex = 1;
+		int pageSize = 8;
+		
+		if (request.getParameter("pageIndex")!=null) {
+			pageIndex=Integer.parseInt(request.getParameter("pageIndex"));
+		}
+		List<Mark> mList = markBiz.getMarkAll(pageIndex, pageSize);
+		System.out.println(mList.toString());
+		JSONArray mJsonArray= JSONArray.fromObject(mList);
+		out.write(mJsonArray.toString());
+		out.flush();
+		out.close();
+	}
+
+}

@@ -1,0 +1,14 @@
+package com.biz;
+
+import java.util.List;
+
+import com.entity.Book;
+import com.entity.Mang;
+
+public interface AdminBiz {
+	public Mang getMangByName(String mangName);
+
+	public List<Book> getBookByName(String bookName);
+
+	public List<Book> getBookBytype(String bookType);
+}

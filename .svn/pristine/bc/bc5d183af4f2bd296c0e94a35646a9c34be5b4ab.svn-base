@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Your Admin Panel</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+<!-- jQuery AND jQueryUI -->
+<script type="text/javascript" src="js/libs/jquery/1.6/jquery.min.js"></script>
+<script type="text/javascript" src="js/libs/jqueryui/1.8.13/jquery-ui.min.js"></script>
+
+<link rel="stylesheet" href="css/min.css" />
+<script type="text/javascript" src="js/min.js"></script>
+<script type="text/javascript" src="content/settings/main.js"></script>
+<link rel="stylesheet" href="content/settings/style.css" />
+</head>
+<body>
+<div class="settings" id="settings">
+	<div class="wrapper">
+		<div class="grid3">
+			<div class="titre">Backgrounds</div>
+			<a href="url(css/img/bg.html" class="backgroundChanger active" title="White"></a> <a href="url(css/img/dark-bg.html" class="backgroundChanger dark" title="Dark"></a> <a href="url(css/img/wood.html" class="backgroundChanger dark" title="Wood"></a> <a href="url(css/img/altbg/smoothwall.html" class="backgroundChanger" title="Smoothwall"></a> <a href="url(css/img/altbg/black_denim.html" class="backgroundChanger dark" title="black_denim"></a> <a href="url(css/img/altbg/carbon.html" class="backgroundChanger dark" title="Carbon"></a> <a href="url(css/img/altbg/double_lined.html" class="backgroundChanger" title="Double lined"></a>
+			<div class="clear"></div>
+		</div>
+		<div class="grid3">
+			<div class="titre">Bloc style</div>
+			<a href="black.html" class="blocChanger" title="Black" style="background:url(css/img/bloctitle.png);"></a> <a href="white.html" class="blocChanger active" title="White" style="background:url(css/img/white-title.png);"></a> <a href="wood.html" class="blocChanger" title="Wood" style="background:url(css/img/wood-title.jpg);"></a>
+			<div class="clear"></div>
+		</div>
+		<div class="grid3">
+			<div class="titre">Sidebar style</div>
+			<a href="grey.html" class="sidebarChanger active" title="Grey" style="background:#494949"></a> <a href="black.html" class="sidebarChanger" title="Black" style="background:#262626"></a> <a href="white.html" class="sidebarChanger" title="White" style="background:#EEEEEE"></a>
+			<div class="clear"></div>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<a class="settingbutton" href="#"> </a> </div>
+<!--              
+                HEAD
+                        -->
+<div id="head">
+	<div class="left"> <a href="#" class="button profile"><img src="img/icons/top/huser.png" alt="" /></a> Hi, <a href="#">John Doe</a> | <a href="#">Logout</a> </div>
+	<div class="right">
+		<form action="#" id="search" class="search placeholder">
+			<label>Looking for something ?</label>
+			<input type="text" value="" name="q" class="text"/>
+			<input type="submit" value="rechercher" class="submit"/>
+		</form>
+	</div>
+</div>
+
+<!--            
+                SIDEBAR
+                         -->
+<div id="sidebar">
+	<ul>
+		<li> <a href="index.html"> <img src="img/icons/menu/inbox.png" alt="" /> Dashboard </a> </li>
+		<li class="current"><a href="#"> Element<img src="img/icons/menu/layout.png" alt="">s</a>
+			<ul>
+				<li class="current"><a href="forms.html?p=forms">新增页面</a></li>
+				<li><a href="table.html?p=table">Table</a></li>
+				<li><a href="gallery.html?p=gallery">Gallery</a></li>
+				<li><a href="icons.html?p=icons">Icons</a></li>
+			</ul>
+		</li>
+		<li><a href="#"><img src="img/icons/menu/brush.png" alt="" /> 未来功能 3Q</a>
+			<ul>
+				<li><a href="#"> 未来功能 3Q</a></li>
+				<li><a href="#"> 未来功能 3Q</a></li>
+				<li><a href="#"> 未来功能 3Q</a></li>
+			</ul>
+		</li>
+		<li><a href="#"><img src="img/icons/menu/brush.png" alt="" /> 未来功能 3Q</a>
+			<ul>
+				<li><a href="#"> 未来功能 3Q</a></li>
+				<li><a href="#"> 未来功能 3Q</a></li>
+				<li><a href="#"> 未来功能 3Q</a></li>
+			</ul>
+		</li>
+	</ul>
+</div>
+
+<!--            
+              CONTENT 
+                        -->
+<div id="content" class="white">
+	<h1><img src="img/icons/posts.png" alt="" /> 管理员新增图书</h1>
+	<div class="bloc">
+		<div class="title">请输入新增图书</div>
+		<div class="content">
+			<div class="input">
+				<label for="input1">Text input</label>
+				<input type="text" id="input1" />
+				Some informations on how to use this field </div>
+			<div class="input medium error">
+				<label for="input2">Medium input with error</label>
+				<input type="text" id="input2" />
+				<span class="error-message">This field can't be empty !</span> </div>
+			<div class="input long">
+				<label for="input3">请写入新增图书信息</label>
+				<input type="text" id="input3" />
+			</div>
+			<div class="input">
+				<label for="file">请选择图书封面</label>
+				<input type="file" id="file" />
+			</div>
+			<div class="input">
+				<label class="label">核实</label>
+				<input type="checkbox" id="check1" checked="checked"/>
+				<label for="check1" class="inline">是否核实图书信息</label>
+				<br/>
+				<input type="checkbox" id="check2" />
+				<label for="check2" class="inline">再次核实</label>
+				<br/>
+			</div>
+			<div class="input">
+				<label class="label">嗯哼</label>
+				<input type="radio" id="radio1" name="radiobutton"  checked="checked"/>
+				<label for="radio1" class="inline">嘟嘟</label>
+				<br/>
+				<input type="radio" id="radio2"  name="radiobutton"/>
+				<label for="radio2" class="inline">ooxx</label>
+			</div>
+			<div class="input">
+				<label for="select">管理员名单</label>
+				<select name="select" id="select">
+					<option value="1">刘晓堃</option>
+					<option value="2">王超</option>
+					<option value="3">庄鹏成</option>
+				</select>
+				请认真核实信息 </div>
+			<div class="input textarea">
+				<label for="textarea1">图书管理日志</label>
+				<textarea name="text" id="textarea1" rows="7" cols="4"></textarea>
+			</div>
+			<div class="input">
+				<label for="input4">算是日期吧</label>
+				<input type="text" class="datepicker" id="input4"/>
+			</div>
+			<div class="input textarea">
+				<label for="textarea2">写点什么好呢 (<a href="https://github.com/akzhan/jwysiwyg">跳转日志页面</a>)</label>
+				<textarea name="text" id="textarea2" rows="7" class="wysiwyg" cols="4">
+                Here you <em>can have</em> some <strong>HTML Content</strong>
+            </textarea>
+			</div>
+			<div class="input">
+				<label>赏金 : $<span></span></label>
+				<input type="text" class="range min-10 max-60" value="35" />
+			</div>
+			<div class="input">
+				<label for="iphonecheck" class="label">是否与厂商电话核实</label>
+				<input type="checkbox" id="iphonecheck" class="iphone"/>
+			</div>
+			<div class="submit">
+				<input type="submit" value="不知道是啥" />
+				<input type="reset" value="只是个按钮" class="black"/>
+				<input type="reset" value="只是个按钮" class="white"/>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>

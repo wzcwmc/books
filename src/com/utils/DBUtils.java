@@ -1,0 +1,109 @@
+package com.utils;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Properties;
+
+public class DBUtils {
+
+	public static Properties pop = null;
+
+	public DBUtils() {
+		initProperties();
+	}
+
+	/**
+	 * 初始化加载属性文件db/properties 用于读取属性文件里的 driver url user pwd
+	 */
+	public void initProperties() {
+		pop = new Properties();
+		InputStream in = this.getClass().getResourceAsStream("/db.properties");
+		try {
+			pop.load(in);
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 构建连接
+	 * 
+	 * @return 链接对象
+	 */
+	public Connection getConn() {
+		Connection conn = null;
+		try {
+			// 加载驱动
+			Class.forName(pop.getProperty("driver"));
+			// 构建连接
+			conn = DriverManager.getConnection(pop.getProperty("url"),
+					pop.getProperty("user"), pop.getProperty("pwd"));
+
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return conn;
+	}
+
+	/**
+	 * 关闭所有资源
+	 * 
+	 * @param rs
+	 *            结果集
+	 * @param pst
+	 *            命令对象
+	 * @param conn
+	 *            链接对象
+	 */
+	public void closeAll(ResultSet rs, PreparedStatement pst, Connection conn) {
+		try {
+			if (rs != null)
+				rs.close();
+			if (pst != null)
+				pst.close();
+			if (conn != null)
+				conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 执行增，删，改。
+	 * 
+	 * @param sql
+	 *            sql语句内容
+	 * @param obj
+	 *            动态参数
+	 * @return
+	 */
+	public int executeUpdate(String sql, Object... obj) {
+		int result = 0;
+		Connection conn = getConn();
+		PreparedStatement pst = null;
+		try {
+			pst = conn.prepareStatement(sql);
+			// 构建SQL语句所需参数
+			if (obj.length > 0) {
+				for (int i = 0; i < obj.length; i++) {
+					pst.setObject((i + 1), obj[i]);
+				}
+			}
+			result = pst.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			closeAll(null, pst, conn);
+		}
+		return result;
+	}
+
+}

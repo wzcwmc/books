@@ -1,0 +1,23 @@
+package com.dao.impl;
+
+import java.util.List;
+
+import com.dao.AdminDao;
+import com.entity.Book;
+import com.entity.Mang;
+
+public class AdminDaoImpl implements AdminDao {
+
+	@Override
+	public Mang getMangByName(String mangName) {
+		
+		return null;
+	}
+
+	@Override
+	public List<Book> getEmployeeBySQL(String sql, Object... obj) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

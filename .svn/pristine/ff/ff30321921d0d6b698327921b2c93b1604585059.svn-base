@@ -1,0 +1,44 @@
+package com.entity;
+/**
+ *管理员实体类   作用：数据的载体
+ * @author Administrator
+ *
+ */
+public class Mang {
+	private int mangId;
+	private String mangName;
+	private String mangPwd;
+	
+	
+	public int getMangId() {
+		return mangId;
+	}
+	public void setMangId(int mangId) {
+		this.mangId = mangId;
+	}
+	public String getMangName() {
+		return mangName;
+	}
+	public void setMangName(String mangName) {
+		this.mangName = mangName;
+	}
+	public String getMangPwd() {
+		return mangPwd;
+	}
+	public void setMangPwd(String mangPwd) {
+		this.mangPwd = mangPwd;
+	}
+	public Mang(int mangId, String mangName, String mangPwd) {
+		super();
+		this.mangId = mangId;
+		this.mangName = mangName;
+		this.mangPwd = mangPwd;
+	}
+	public Mang() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	
+	
+	
+}

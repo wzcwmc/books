@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title> Mini 书屋 图书信息</title>
+
+<meta name="keywords" content="keyword1,keyword2,keyword3">
+<meta name="description" content="this is my page">
+<meta name="content-type" content="text/html; charset=UTF-8">
+
+<!-- jQuery AND jQueryUI -->
+<script type="text/javascript" src="js/libs/jquery/1.6/jquery.min.js"></script>
+<script type="text/javascript" src="js/jquery-1.8.2.min.js"></script>
+<script type="text/javascript" src="js/libs/jqueryui/1.8.13/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="css/min.css" />
+<script type="text/javascript" src="js/min.js"></script>
+<script type="text/javascript" src="content/settings/main.js"></script>
+<link rel="stylesheet" href="content/settings/style.css" />
+
+<link href="css/style_jPaginate.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/jquery.paginate.js"></script>
+<script type="text/javascript" src="layer/layer.js"></script>
+<style type="text/css">
+.bookimg{
+ width:160px;
+ height:190px;
+}
+</style>
+</head>
+
+<body>
+	
+	<!--              
+                HEAD
+                        -->
+	<div id="head">
+		<div class="left">
+			<a href="#" class="button profile"><img
+				src="img/icons/top/huser.png" alt="" /></a> Hi, <a href="#" class="user"></a> | <a href="ExitServlet?type=reader">退出</a>
+		</div>
+		<div class="right">
+			
+		</div>
+	</div>
+
+	<!--            
+                SIDEBAR
+                         -->
+	<div id="sidebar">
+		<ul>
+			<li><a href="IndexServlet?user=reader"> <img
+					src="img/icons/menu/home.png" alt="" /> Mini 书屋
+			</a></li>
+			<li class="current"><a href="#"><img
+					src="img/icons/menu/books.png" alt="" /> 我的书屋</a>
+				<ul>
+					<li class="current"><a href="#">图书信息</a></li>
+					<li><a href="readerMark.html">我的记录</a></li>
+				</ul></li>
+			<li><a href="#"><img src="img/icons/menu/search.png" alt="" />
+					查询</a>
+				<ul>
+					<li><a href="search.html"> 查询图书</a></li>
+				</ul></li>
+			<li><a><img src="img/icons/menu/brush.png" alt="" />未来功能 3Q</a>
+			</li>
+		</ul>
+	</div>
+
+	<!--            
+              CONTENT 
+                        -->
+	<div id="content" class="white">
+		<h1>
+			<img src="img/icons/pictures.png" alt="" /> 图书
+		</h1>
+		<div class="bloc">
+			<div class="title">童话 类图书</div>
+			<div class="content" id="one">
+			<p>点击图片 选择借书\(^o^)/~</p>	
+			<ul class='gallery content1'>
+			</ul>
+			</div>
+			<div id="demo2" class="page1"></div>
+		</div>
+		<div class="bloc">
+			<div class="title">哲学 类图书</div>
+			<div class="content" id="two">
+				<p>点击图片 选择借书\(^o^)/~</p>	
+				<ul class='gallery content2'>
+				</ul>
+			</div>
+			<div id="demo2" class="page2"></div>
+		</div>
+		<div class="bloc">
+			<div class="title">军事 类图书</div>
+			<div class="content" id="three">
+				<p>点击图片 选择借书\(^o^)/~</p>	
+				<ul class='gallery content3'>
+				</ul>
+			</div>
+			<div id="demo2" class="page3"></div>
+		</div>
+	</div>
+	<script type="text/javascript">
+//页容量
+var pageSize=9;
+//总页数
+var pageCount1;
+var pageCount2;
+var pageCount3;
+	$(function(){	
+		getPageCounts();
+		$.ajax({
+			url:"WelcomeServlet?type=reader",
+			data:"",
+			type:"post",
+			datatype:"text",
+			success: function(result) {
+				$(".user").html(result);
+			}
+		});
+		
+	});
+   function getPageCounts()
+   {
+	   
+	   var jsonStr1={pSize:pageSize,type:'童话'};
+	   var jsonStr2={pSize:pageSize,type:'哲学'};
+	   var jsonStr3={pSize:pageSize,type:'军事'};
+	   
+	   
+		$.post("GetPageCountServlet",
+	   			jsonStr1,
+	   			function(data) {
+	   				var str=$.parseJSON(data);
+	   				pageCount1=str.pcount;
+	   				/*调用进行分页的方法*/
+	    			setPages1();
+	   			});
+		$.post("GetPageCountServlet",
+	   			jsonStr2,
+	   			function(data) {
+	   				var str=$.parseJSON(data);
+	   				pageCount2=str.pcount;
+	   				/*调用进行分页的方法*/
+	    			setPages2();
+	   			});
+		$.post("GetPageCountServlet",
+	   			jsonStr3,
+	   			function(data) {
+	   				var str=$.parseJSON(data);
+	   				pageCount3=str.pcount;
+	   				/*调用进行分页的方法*/
+	    			setPages3();
+	   			});
+   }
+   /*分页的函数*/
+   function setPages1(){
+   	$(".page1").paginate({
+    			count : pageCount1, //${6}此处要写清本次分页的总页数,不支持动态改变,不可写非int型数.个人建议在进入页面的时候就把页数传过来
+    			start : 1, //开始页码,从1开始,一般设置成1
+    			display : 6, //在分页条上显示的个数,分页数等于或超过本设置会显示设置的个数,不够的话会显示真实个数,不过就不会出现滚动效果了.
+    			border : false, //是否显示外框
+    			text_color : '#888', //文字颜色
+    			background_color : '#EEE', //背景颜色
+    			text_hover_color : 'black', //鼠标放上去时文字的颜色
+    			background_hover_color : '#CFCFCF',//鼠标放上去时背景的颜色
+    			rotate : true, //是否滚动
+    			images : false, //
+    			mouse : 'press', //可选值为'press'和'slide',具体差别请自己体验.
+    			onChange : function(page) {//本插件唯一可触发的事件,在点击页数的时候触发,只传过来当前被选中的页数,我想这其实足够了.
+    				getPageData1(page, pageSize);
+    			}
+    		});
+    		//调用ajax异步实现每页的数据
+    		getPageData1(1, pageSize);
+   }
+   function setPages2(){
+	   	$(".page2").paginate({
+	    			count : pageCount2, //${6}此处要写清本次分页的总页数,不支持动态改变,不可写非int型数.个人建议在进入页面的时候就把页数传过来
+	    			start : 1, //开始页码,从1开始,一般设置成1
+	    			display : 6, //在分页条上显示的个数,分页数等于或超过本设置会显示设置的个数,不够的话会显示真实个数,不过就不会出现滚动效果了.
+	    			border : false, //是否显示外框
+	    			text_color : '#888', //文字颜色
+	    			background_color : '#EEE', //背景颜色
+	    			text_hover_color : 'black', //鼠标放上去时文字的颜色
+	    			background_hover_color : '#CFCFCF',//鼠标放上去时背景的颜色
+	    			rotate : true, //是否滚动
+	    			images : false, //
+	    			mouse : 'press', //可选值为'press'和'slide',具体差别请自己体验.
+	    			onChange : function(page) {//本插件唯一可触发的事件,在点击页数的时候触发,只传过来当前被选中的页数,我想这其实足够了.
+	    				getPageData2(page, pageSize);
+	    			}
+	    		});
+	    		//调用ajax异步实现每页的数据
+	    		getPageData2(1, pageSize);
+	   }
+   function setPages3(){
+	   	$(".page3").paginate({
+	    			count : pageCount3, //${6}此处要写清本次分页的总页数,不支持动态改变,不可写非int型数.个人建议在进入页面的时候就把页数传过来
+	    			start : 1, //开始页码,从1开始,一般设置成1
+	    			display : 6, //在分页条上显示的个数,分页数等于或超过本设置会显示设置的个数,不够的话会显示真实个数,不过就不会出现滚动效果了.
+	    			border : false, //是否显示外框
+	    			text_color : '#888', //文字颜色
+	    			background_color : '#EEE', //背景颜色
+	    			text_hover_color : 'black', //鼠标放上去时文字的颜色
+	    			background_hover_color : '#CFCFCF',//鼠标放上去时背景的颜色
+	    			rotate : true, //是否滚动
+	    			images : false, //
+	    			mouse : 'press', //可选值为'press'和'slide',具体差别请自己体验.
+	    			onChange : function(page) {//本插件唯一可触发的事件,在点击页数的时候触发,只传过来当前被选中的页数,我想这其实足够了.
+	    				getPageData3(page, pageSize);
+	    			}
+	    		});
+	    		//调用ajax异步实现每页的数据
+	    		getPageData3(1, pageSize);
+	   }
+   function getPageData1(pageIndex,pageSize){
+		var jsonStr={
+				start : pageIndex,
+				pageSize : pageSize,
+				type:'童话'
+			};
+		$.ajax({
+			url : "PageServlet",
+			type : "post",
+			data : jsonStr,
+			dataType : "json",
+			timeout : 100000,
+			error : function() {
+				alert('请求超时，请稍候再试');
+			},
+			success : function(result) {
+				var s = new StringBuffer();
+				$.each(result, function(index, value) {
+					s.append("<li style='margin: 20px 10px;'>");
+					s.append("<a id='one"+index+"'>").append("<img class='bookimg' src='");
+					s.append(value.bookImg).append("' onclick= lendBook('");
+					s.append(value.bookId+"','"+value.bookName+"','"+value.nowNum+"','one");
+					s.append("') /></a>");
+					s.append("<span class='info'>《 "+value.bookName+" 》</span>");
+					s.append("</li>");
+				});
+				$(".content1").html(s.toString());
+			}
+		});
+	}
+   function getPageData2(pageIndex,pageSize){
+		var jsonStr={
+				start : pageIndex,
+				pageSize : pageSize,
+				type:'哲学'
+			};
+		$.ajax({
+			url : "PageServlet",
+			type : "post",
+			data : jsonStr,
+			dataType : "json",
+			timeout : 100000,
+			error : function() {
+				alert('请求超时，请稍候再试');
+			},
+			success : function(result) {
+				var s = new StringBuffer();
+				$.each(result, function(index, value) {
+					s.append("<li style='margin: 20px 10px;'>");
+					s.append("<a id='two"+index+"'>").append("<img class='bookimg' src='");
+					s.append(value.bookImg).append("' onclick= lendBook('");
+					s.append(value.bookId+"','"+value.bookName+"','"+value.nowNum+"','two");
+					s.append("') /></a>");
+					s.append("<span class='info'>《 "+value.bookName+" 》</span>");
+					s.append("</li>");
+				});
+				$(".content2").html(s.toString());
+			}
+		});
+	}
+   function getPageData3(pageIndex,pageSize){
+		var jsonStr={
+				start : pageIndex,
+				pageSize : pageSize,
+				type:'军事'
+			};
+		$.ajax({
+			url : "PageServlet",
+			type : "post",
+			data : jsonStr,
+			dataType : "json",
+			timeout : 100000,
+			error : function() {
+				alert('请求超时，请稍候再试');
+			},
+			success : function(result) {
+				var s = new StringBuffer();
+				$.each(result, function(index, value) {
+					s.append("<li style='margin: 20px 10px;'>");
+					s.append("<a id='three"+index+"'>").append("<img class='bookimg' src='");
+					s.append(value.bookImg).append("' onclick= lendBook('");
+					s.append(value.bookId+"','"+value.bookName+"','"+value.nowNum+"','three");
+					s.append("') /></a>");
+					s.append("<span class='info'>《 "+value.bookName+" 》</span>");
+					s.append("</li>");
+				});
+				$(".content3").html(s.toString());
+			}
+		});
+	}
+	function StringBuffer() {
+		this.__string__ = new Array();
+	}
+	StringBuffer.prototype.append = function(str) {
+		this.__string__.push(str);
+		return this;
+	};
+	StringBuffer.prototype.toString = function() {
+		return this.__string__.join("");
+	};
+	function lendBook(bookId,bookName,nowNum,index){
+	
+		var str ="#"+index;
+		var str2="很抱歉，您来晚了！《"+bookName+"》已经借完了！";
+		if(nowNum<=0){
+			layer.msg(str2);
+		}else{
+			var str3="你确定要借 《"+bookName+"》吗 O(∩_∩)O~~";
+			layer.msg(str3, {
+			  time: 0 //不自动关闭
+			  ,btn: ['就它了', '再看看']
+			  ,yes: function(index){
+			     layer.close(index);
+			     $.ajax({
+	    			url : "LendServlet?bookId=" + bookId,
+	    			type : "get",
+	    			data : "",
+	    			dataType : "text",
+	    			timeout : 10000,
+	    			error : function() {
+	    				alert('请求超时，请稍候再试');
+	    			},
+	    			success : function(result) {
+	    				var isOk=result;
+	    				if(isOk=="ok"){
+	    					layer.msg('借书成功 \(^o^)/~');
+	    				}
+	    			}
+				});
+			  }
+			});
+		}
+	}
+</script>
+</body>
+</html>

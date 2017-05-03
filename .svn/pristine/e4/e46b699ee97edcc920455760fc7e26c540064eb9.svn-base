@@ -1,0 +1,29 @@
+package com.dao;
+
+import java.util.List;
+
+import com.entity.Book;
+import com.entity.Mang;
+
+public interface AdminDao {
+	/**
+	 * 根据登录名获取管理员信息
+	 * @param mangName  登录名
+	 * @return  管理员实体
+	 */
+    public Mang getMangByName(String mangName);
+    /**
+     * 公用方法，执行sql语句
+     * @param sql  sql语句
+     * @param obj  
+     * @return  查询结果的集合
+     */
+    public List<Book> getBookBySQL(String sql,Object...obj);
+    /**
+     * 根据书名模糊查询
+     * @param bookName  书名字段
+     * @return  图书集合
+     */
+    public List<Book> getBookByName(String bookName);
+    
+}

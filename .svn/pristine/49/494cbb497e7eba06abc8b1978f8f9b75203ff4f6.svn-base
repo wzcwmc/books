@@ -1,0 +1,27 @@
+package com.biz;
+
+import java.util.List;
+
+import com.entity.Reader;
+
+public interface ReaderBiz {
+
+	/**
+	 * 获取所有的读者信息列表
+	 * @return 读者信息集合
+	 */
+	public List<Reader> getReaderAll(int pageIndex, int pageSize);
+
+	/**
+	 * 根据登名获取读者信息
+	 * @return 读者对象
+	 */
+	public Reader getReaderByLoginId(String loginId, String loginPwd);
+	
+	/**
+	 * 注册用户
+	 * @param reader 读者对象
+	 * @return
+	 */
+	public int register(Reader reader);
+}

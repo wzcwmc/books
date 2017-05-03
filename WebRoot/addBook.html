@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Mini 书屋  add book </title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+<!-- jQuery AND jQueryUI -->
+<script type="text/javascript" src="js/libs/jquery/1.6/jquery.min.js"></script>
+<script type="text/javascript" src="js/libs/jqueryui/1.8.13/jquery-ui.min.js"></script>
+
+<!-- Compressed Version
+        <link type="text/css" rel="stylesheet" href="min/b=CoreAdmin&f=css/reset.css,css/style.css,css/jqueryui/jqueryui.css,js/jwysiwyg/jquery.wysiwyg.old-school.css,js/zoombox/zoombox.css" />
+        <script type="text/javascript" src="min/b=CoreAdmin/js&f=cookie/jquery.cookie.js,jwysiwyg/jquery.wysiwyg.js,tooltipsy.min.js,iphone-style-checkboxes.js,excanvas.js,zoombox/zoombox.js,visualize.jQuery.js,jquery.uniform.min.js,main.js"></script>
+        -->
+<link rel="stylesheet" href="css/min.css" />
+<script type="text/javascript" src="js/min.js"></script>
+<script type="text/javascript" src="My97DatePicker/WdatePicker.js"></script>
+<style type="text/css">
+.loadfile {
+	float: left;
+}
+
+.loadfile {
+	margin-top: 20px;
+	padding:0px;
+	display: block;
+	width: 200px;
+	height: 300px;
+	line-height: 312px;
+	font-size: 60px;
+	text-align: center;
+	border: 1px solid #ccc;
+	font-size: 60px;
+}
+
+.bg_size {
+padding:0px;
+	background-repeat: no-repeat;
+	background-size:200px 312px;
+}
+</style>
+<link rel="stylesheet" href="content/settings/style.css" />
+
+<script type="text/javascript">
+	$(function(){
+		$.ajax({
+			url:"WelcomeServlet?type=manger",
+			data:"",
+			type:"post",
+			datatype:"text",
+			success: function(result) {
+				$(".user").html(result);
+			}
+		});
+	});
+</script>
+
+</head>
+<body>
+<script type="text/javascript" src="content/settings/main.js"></script>
+
+<!--              
+                HEAD
+                        -->
+<div id="head">
+	<div class="left"> <a href="#" class="button profile"><img src="img/icons/top/huser.png" alt="" /></a> Hi, <a href="#" class="user"></a> | <a href="ExitServlet?type=manger">退出</a> </div>
+</div>
+<!--            
+                SIDEBAR
+                         -->
+<div id="sidebar">
+	<ul>
+		<li> <a href="IndexServlet?user=mang"> <img src="img/icons/menu/home.png" alt="" /> Mini 书屋 </a> </li>
+		<li class="current"><a href="#"><img src="img/icons/menu/books.png" alt="" /> 管理 </a>
+			<ul>
+				<li><a  href="adminShow.html"> 信息明细 </a></li>
+				<li class="current"><a href="addBook.html"> 添加图书 </a></li>
+			</ul>
+		</li>
+		<li><a><img src="img/icons/menu/brush.png" alt="" /> 未来功能 3Q</a>
+		</li>
+		<li><a><img src="img/icons/menu/brush.png" alt="" /> 未来功能 3Q</a>
+		</li>
+	</ul>
+</div>
+
+<!--            
+              CONTENT 
+                        -->
+<form action="AddBookServlet" method="post" enctype="multipart/form-data">
+<div id="content" class="white">
+	<h1><img src="img/icons/posts.png" alt="" /> 增加图书</h1>
+	<div class="bloc">
+		<div class="title">书单</div>
+		<div class="content">
+			<div class="" style="float:left; margin: 0px 50px auto auto">
+				<label id="imglab" title="上传封面图像" class="loadfile" for="uploadfile" >书的封面</label>
+				<div  style="display:none;"><input type="file" id="uploadfile" name="bookImg"/></div>
+				
+			</div>
+			<div class="input" style="margin-left:260px ">
+				<label for="input1">书名</label>
+				<input type="text" id="input1" name="bookName"/>
+			</div>
+			
+			<div class="input" style="margin-left:260px ">
+				<label for="input2">作者</label>
+				<input type="text" id="input2" name="author"/>
+			</div>
+			
+			<div class="input" style="margin-left:260px ">
+				<label for="input3">版本号</label>
+				<input type="text" id="input3" name="isbn"/>
+			</div>
+			<div class="input" style="margin-left:260px ">
+				<label for="input4">出版社</label>
+				<input type="text" id="input4" name="publisher"/>
+			</div>
+			
+			<div class="input" style="margin-left:260px ">
+				<label for="input5">出版日期</label>
+				<input type="text" style="width:156px" 
+				onFocus="WdatePicker({isShowClear:false,readOnly:true})" id="input5" name="pubDate"/>
+			</div>
+			
+			<div class="input" style="margin-left:260px ">
+				<label for="select">图书类型</label>
+				<select id="select" style="width:158px" name="bookType">
+					<option value="童话">童话</option>
+					<option value="哲学">哲学</option>
+					<option value="军事">军事</option>
+				</select></div>
+				
+			<div class="input textarea">
+				<label for="textarea2">图书介绍</label>
+				<textarea id="textarea2" rows="7" class="wysiwyg" cols="4" name="introduction">
+                	图书简介
+            	</textarea>
+			</div>
+			<div class="input">
+				<label>图书价格 : $<span></span></label>
+				<input type="text" class="range min-10 max-150" value="50" name="price"/>
+			</div>
+			
+			<div class="input">
+				<label for="input6">书的数量</label>
+				<input type="text" id="input6" name="bookNum"/>
+			</div>
+			
+			
+			
+			<div class="submit">
+				<input type="submit" value="  提交   " />
+			</div>
+
+			
+		</div>
+		</div>
+		</div>
+		</form>
+
+
+<script type="text/javascript">
+			$(function(){
+				$("#uploadfile").change(function(){
+					var fr=new FileReader();
+					fr.readAsDataURL(document.getElementById("uploadfile").files[0]);
+					fr.onload=function(e){
+					
+						$("#imglab").addClass("bg_size");
+						$("#imglab").css("background-image","url(" + e.target.result + ")");
+/* 						$("#imglab").css("width","200px");
+						$("#imglab").css("height","50px"); */
+						$("#imglab").html('');
+					};
+				});
+			});
+</script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+package com.dao;
+
+import java.util.List;
+
+import com.entity.Book;
+
+public interface BookDao {
+
+	 /**
+     * 公用方法，执行sql语句
+     * @param sql  sql语句
+     * @param obj  
+     * @return  查询结果的集合
+     */
+    public List<Book> getBookBySQL(String sql,Object...obj);
+    
+    /**
+     * 根据书名模糊查询
+     * @param bookName  书名字段
+     * @return  图书集合
+     */
+    public List<Book> getBookByName(String bookName);
+    /**
+     * 根据版本号精确查询
+     * @param Isbn  书名字段
+     * @return  图书
+     */
+    public Book getBookByIsbn(String Isbn);
+    
+    /**
+     * 根据书的类型模糊查询
+     * @param bookType  图书类型
+     * @return  图书集合
+     */
+    public List<Book> getBookBytype(String bookType,int pageIndex, int pageSize);
+    
+    /**
+     * 根据输入的关键字查询图书
+     * @param str 输入的关键字
+     * @return 图书集合
+     */
+    public List<Book> getBookByString(String str, int pageIndex, int pageSize);
+    
+    /**
+     * 根据编号查询图书
+     * @param bookId 编号
+     * @return 图书集合（只含一本）
+     */
+    public Book  getBookById(int bookId);
+    
+    /**
+     * 查询借出数量多的书
+     * @return 图书集合
+     */
+    public List<Book> getBookByLendNum();
+    
+    /**
+     * 查询近期入库的书籍
+     * @return 图书集合
+     */
+    public List<Book> getBookByInnerDate();
+    
+    /**
+     * 分页查询 获得所有图书信息
+     * @param pageIndex
+     * @param pageSize
+     * @return
+     */
+    public List<Book> getBookAll(int pageIndex, int pageSize);
+    /**
+     * 查询图书总数
+     * @return 图书总数
+     */
+    public int getBookCounts();
+    /**
+     * 查询相同类型图书总数
+     * @return 图书总数
+     */
+    public int getCountsBybookType(String bookType);
+    /**
+     * 根据关键词搜索查询相同条件的图书总数
+     * @return 图书总数
+     */
+    public int getCountsByString(String str);
+    /**
+     * 添加图书
+     * @return  影响的行数
+     */
+    public int addBook(Book book);
+    /**
+     * 根据bookId删除图书
+     * @param bookId
+     * @return  影响的行数
+     */
+    public int deleteBook(int bookId);
+    /**
+     * 图书更新
+     * @param book
+     * @return  影响的行数
+     */
+    public int updateBook(Book book,int bookId);
+    
+}

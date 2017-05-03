@@ -1,0 +1,116 @@
+package com.dao.impl;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.dao.ReaderDao;
+import com.entity.Reader;
+import com.utils.DBUtils;
+
+public class ReaderDaoImpl implements ReaderDao {
+
+	DBUtils dbutils = new DBUtils();
+	private Connection conn = null;
+	private PreparedStatement pst = null;
+	private ResultSet rs = null;
+	
+	@Override
+	public List<Reader> getReaderAll(int pageIndex, int pageSize) {
+
+		StringBuffer sb= new StringBuffer();
+		sb.append(" select * from (select ra.*, rownum as rowno  ");
+		sb.append(" from ( select r.* from reader r ) ra  ");
+		sb.append(" where rowno <=  ");
+		sb.append(pageIndex*pageSize);
+		sb.append(" ) rea where rea.rowno >= ");
+		sb.append((pageIndex-1)*pageSize+1);
+		return getReaderBySql(sb.toString());
+	}
+
+	@Override
+	public Reader getReaderByLoginId(String LoginId) {
+		List<Reader> list = null;
+		StringBuilder sql = new StringBuilder();
+		sql.append(" select reaid, loginid, loginpwd, reaname, gender, birthday, ");
+		sql.append(" address, phone from reader where loginid = ? ");
+		list = getReaderBySql(sql.toString(), LoginId);
+		if (list.size()>0) {
+			return list.get(0);
+		}
+		return null;
+	}
+
+	private List<Reader> getReaderBySql(String sql, Object... obj) {
+		List<Reader> list = new ArrayList<Reader>();
+		Reader reader = null;
+		conn = dbutils.getConn();
+		try {
+			pst = conn.prepareStatement(sql);
+			for (int i = 0; i < obj.length; i++) {
+				pst.setObject(i + 1, obj[i]);
+			}
+			rs = pst.executeQuery();
+			// System.out.println();
+			while (rs.next()) {
+				reader = new Reader();
+				reader.setReaId(rs.getInt("reaid"));
+				reader.setLoginId(rs.getString("loginid"));
+				reader.setLoginPwd(rs.getString("loginpwd"));
+				reader.setReaName(rs.getString("reaname"));
+				reader.setGender(rs.getString("gender"));
+				reader.setBirthday(rs.getDate("birthday"));
+				reader.setAddress(rs.getString("address"));
+				reader.setPhone(rs.getString("phone"));
+				list.add(reader);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbutils.closeAll(rs, pst, conn);
+		}
+		return list;
+	}
+
+	@Override
+	public int addReader(Reader reader) {
+		StringBuilder sb=new StringBuilder();
+		sb.append(" insert into reader ");
+		sb.append(" (loginid, loginpwd, reaname, ");
+		sb.append(" gender, birthday, address, phone) ");
+		sb.append(" values ");
+		sb.append(" (?, ?, ?, ");
+		sb.append(" ?, ?, ?, ?) ");
+		Object obj[]={
+				reader.getLoginId(),reader.getLoginPwd(),
+				reader.getReaName(),reader.getGender(),
+				reader.getBirthday(),reader.getAddress(),
+				reader.getPhone()
+		};
+		
+		return dbutils.executeUpdate(sb.toString(), obj);
+	}
+
+	@Override
+	public int getReaderCounts() {
+		String sql=" select count(0) as rwono from reader ";
+		int count=0;
+		conn=dbutils.getConn();
+		try {
+			pst= conn.prepareStatement(sql);
+			rs=pst.executeQuery();
+			if(rs.next())
+			{
+				count=rs.getInt("rowno");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally{
+			dbutils.closeAll(rs, pst, conn);
+		}
+		return count;
+	}
+}

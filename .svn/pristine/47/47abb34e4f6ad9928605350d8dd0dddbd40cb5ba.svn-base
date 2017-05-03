@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Your Admin Panel</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+<!-- jQuery AND jQueryUI -->
+
+
+<!-- Compressed Version
+        <link type="text/css" rel="stylesheet" href="min/b=CoreAdmin&f=css/reset.css,css/style.css,css/jqueryui/jqueryui.css,js/jwysiwyg/jquery.wysiwyg.old-school.css,js/zoombox/zoombox.css" />
+        <script type="text/javascript" src="min/b=CoreAdmin/js&f=cookie/jquery.cookie.js,jwysiwyg/jquery.wysiwyg.js,tooltipsy.min.js,iphone-style-checkboxes.js,excanvas.js,zoombox/zoombox.js,visualize.jQuery.js,jquery.uniform.min.js,main.js"></script>
+        -->
+<link rel="stylesheet" href="css/min.css" />
+
+<script type="text/javascript" src="js/libs/jquery/1.6/jquery.min.js"></script>
+<script type="text/javascript" src="js/libs/jqueryui/1.8.13/jquery-ui.min.js"></script>
+
+<script type="text/javascript" src="js/jquery-2.1.4.js"></script>
+
+<script type="text/javascript" src="js/min.js"></script>
+<script type="text/javascript" src="content/settings/main.js"></script>
+<link rel="stylesheet" href="content/settings/style.css" />
+<link href="css/style_jPaginate.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/jquery.paginate.js"></script>
+
+<script type="text/javascript" src="layer/layer.js"></script>
+<script type="text/javascript">
+
+	//页容量
+	var pageSize1=5;
+	var pageSize2=8;
+	//总页数
+	var pageCount1;
+	var pageCount1;
+
+	$(function(){
+	//获取总页数
+   	getPageCounts();
+		$.ajax({
+			url:"WelcomeServlet?type=manger",
+			data:"",
+			type:"post",
+			datatype:"text",
+			success: function(result) {
+				$(".user").html(result);
+			}
+		});
+		
+	});
+
+   function getPageCounts(){
+   	var jsonStr1={pSize1:pageSize1};
+   	var jsonStr2={pSize2:pageSize2};
+   	$.post("GetPageCountServlet?type=book",
+   			jsonStr1,
+   			function(data) {
+   				var str=$.parseJSON(data);
+   				pageCount1=str.pcount;
+   				/*调用进行分页的方法*/
+    			setPages1();
+   			});
+   	
+   	$.post("GetPageCountServlet?type=reader",
+   			jsonStr2,
+   			function(data) {
+   				var str=$.parseJSON(data);
+   				pageCount2=str.pcount;
+   				/*调用进行分页的方法*/
+    			setPages2();
+   			});
+   }
+   /*分页的函数*/
+   function setPages1(){
+   	$(".page1").paginate({
+    			count : pageCount1, //${6}此处要写清本次分页的总页数,不支持动态改变,不可写非int型数.个人建议在进入页面的时候就把页数传过来
+    			start : 1, //开始页码,从1开始,一般设置成1
+    			display : 6, //在分页条上显示的个数,分页数等于或超过本设置会显示设置的个数,不够的话会显示真实个数,不过就不会出现滚动效果了.
+    			border : false, //是否显示外框
+    			text_color : '#888', //文字颜色
+    			background_color : '#EEE', //背景颜色
+    			text_hover_color : 'black', //鼠标放上去时文字的颜色
+    			background_hover_color : '#CFCFCF',//鼠标放上去时背景的颜色
+    			rotate : true, //是否滚动
+    			images : false, //
+    			mouse : 'press', //可选值为'press'和'slide',具体差别请自己体验.
+    			onChange : function(page) {//本插件唯一可触发的事件,在点击页数的时候触发,只传过来当前被选中的页数,我想这其实足够了.
+    				getPageData1(page, pageSize1);
+    			}
+    		});
+    		//调用ajax异步实现每页的数据
+    		getPageData1(1, pageSize1);
+   }
+   
+    function setPages2(){
+   	$(".page2").paginate({
+    			count : pageCount2, //${6}此处要写清本次分页的总页数,不支持动态改变,不可写非int型数.个人建议在进入页面的时候就把页数传过来
+    			start : 1, //开始页码,从1开始,一般设置成1
+    			display : 6, //在分页条上显示的个数,分页数等于或超过本设置会显示设置的个数,不够的话会显示真实个数,不过就不会出现滚动效果了.
+    			border : false, //是否显示外框
+    			text_color : '#888', //文字颜色
+    			background_color : '#EEE', //背景颜色
+    			text_hover_color : 'black', //鼠标放上去时文字的颜色
+    			background_hover_color : '#CFCFCF',//鼠标放上去时背景的颜色
+    			rotate : true, //是否滚动
+    			images : false, //
+    			mouse : 'press', //可选值为'press'和'slide',具体差别请自己体验.
+    			onChange : function(page) {//本插件唯一可触发的事件,在点击页数的时候触发,只传过来当前被选中的页数,我想这其实足够了.
+    				getPageData2(page, pageSize2);
+    			}
+    		});
+    		//调用ajax异步实现每页的数据
+    		getPageData2(1, pageSize2);
+   }
+   
+   
+   function getPageData1(pageIndex,pageSize){
+    		var jsonStr={
+    				start : pageIndex,
+    				pageSize : pageSize,
+    			};
+    		$.ajax({
+    			url : "PageServlet?type=book",
+    			type : "post",
+    			data : jsonStr,
+    			dataType : "json",
+    			timeout : 100000,
+    			error : function() {
+    				alert('请求超时，请稍候再试');
+    			},
+    			success : function(result) {
+    				var s = new StringBuffer();
+    				$.each(result, function(index, value) {
+    					s.append("<tr>").append("<td>").append((index + 1)).append(
+    							"</td>").append("<td class='picture' style='width:140px;'>");
+    					s.append("<a href='#' class='zoombox'>").append("<img src='");
+    					s.append(value.bookImg).append("' style='width:90px;height:100px' alt='' /></a></td>").append("<td>");
+    					s.append(value.bookName).append("</td>").append("<td>");
+    					s.append(value.author).append("</td>").append("<td>");
+    					s.append(value.publisher).append("</td>").append("<td>");
+    					s.append(value.bookType).append("</td>").append("<td>");
+    					s.append(value.bookNum).append("</td>").append("<td>");
+    					s.append(value.lendNum).append("</td>").append("<td>");
+    					s.append(value.nowNum).append("</td>").append("<td class='actions'>");
+    					s.append("<img src='img/icons/actions/edit.png' alt='编辑' onclick='showBook("+value.bookId+")'/>");
+    					s.append("<img src='img/icons/actions/delete.png' alt='删除' />");
+    					s.append("</td>").append("</tr>");
+    				});
+    				$(".btbody1").html(s.toString());
+    			}
+    		});
+    	}
+    	
+    	function getPageData2(pageIndex,pageSize){
+    		var jsonStr={
+    				start : pageIndex,
+    				pageSize : pageSize,
+    			};
+    		$.ajax({
+    			url : "PageServlet?type=reader",
+    			type : "post",
+    			data : jsonStr,
+    			dataType : "json",
+    			timeout : 100000,
+    			error : function() {
+    				alert('请求超时，请稍候再试');
+    			},
+    			success : function(result) {
+    				var s = new StringBuffer();
+    				$.each(result, function(index, value) {
+    					s.append("<tr>").append("<td>").append((index + 1)).append(
+    							"</td>").append("<td>");
+    					s.append(value.loginId).append("</td>").append("<td>");
+    					s.append(value.reaName).append("</td>").append("<td>");
+    					s.append(value.gender).append("</td>").append("<td>");
+    					var birthday= toDates(value.birthday.time);
+    					s.append(birthday.getFullYear()+"-").append(birthday.getMonth()+1+"-").append(birthday.getDate());
+    					s.append("</td>").append("<td>");
+    					s.append(value.address).append("</td>").append("<td>");
+    					s.append(value.phone).append("</td>").append("<td class='actions'>");
+    					s.append("<a href='#' title='编辑'><img src='img/icons/actions/edit.png' alt='' /></a>");
+    					s.append("<a href='#' title='删除'><img src='img/icons/actions/delete.png' alt='' /></a>");
+    					s.append("</td>").append("</tr>");
+    				});
+    				$(".btbody2").html(s.toString());
+    			}
+    		});
+    	}
+    	
+    function toDates(dateStr){
+	 //js 日期格式
+	 var newTime = new Date(dateStr); 
+	 return newTime;//返回js日期格式
+  	}
+    	
+    	function StringBuffer() {
+    		this.__string__ = new Array();
+    	}
+    	StringBuffer.prototype.append = function(str) {
+    		this.__string__.push(str);
+    		return this;
+    	};
+    	StringBuffer.prototype.toString = function() {
+    		return this.__string__.join("");
+    	};
+	
+	function showBook(bookId){
+		layer.open({
+			type : 2,
+			title : '更新信息',
+			shadeClose : true,
+			shade : 0.5,
+			area : [ '650px', '600px' ],
+			content : 'UpdateServlet?type=book&bookId='+bookId //iframe的url
+		});
+	}
+		
+
+</script>
+
+</head>
+<body>
+
+
+<!--              
+                HEAD
+                        -->
+<div id="head">
+	<div class="left"> <a href="#" class="button profile"><img src="img/icons/top/huser.png" alt="" /></a> Hi, <a href="#" class="user"></a> | <a href="ExitServlet?type=manger">退出</a> </div>
+	
+</div>
+
+<!--            
+                SIDEBAR
+                         -->
+<div id="sidebar">
+	<ul>
+		<li> <a href="IndexServlet?user=mang"> <img src="img/icons/menu/inbox.png" alt="" /> Mini 书屋 </a> </li>
+		<li class="current"><a href="#"><img src="img/icons/menu/layout.png" alt="" /> 管理 </a>
+			<ul>
+				
+				<li class="current"><a href="adminShow.html"> 信息明细 </a></li>
+				<li><a href="addBook.html"> 添加图书 </a></li>
+				<li><a href="#">Forms</a></li>
+				<li><a href="#">Icons</a></li>
+				
+			</ul>
+		</li>
+		<li><a href="#"><img src="img/icons/menu/brush.png" alt="" /> 未来功能 3Q</a>
+		</li>
+		<li><a href="#"><img src="img/icons/menu/brush.png" alt="" /> 未来功能 3Q</a>
+		</li>
+	</ul>
+</div>
+
+<!--            
+              CONTENT 
+                        -->
+<div id="content" class="white">
+	<h1><img src="img/icons/posts.png" alt="" /> 信息列表 </h1>
+	<div class="bloc">
+		<div class="title"> 图书信息管理 </div>
+		<div class="content">
+			<table>
+				<thead>
+					<tr>
+						<th>序号</th>
+						<th>封面</th>
+						<th>书名</th>
+						<th>作者</th>
+						<th>出版社</th>
+						<th>类型</th>
+						<th>总数</th>
+						<th>借出数</th>
+						<th>剩余数</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody class="btbody1">
+					
+				</tbody>
+			</table>
+			<div id="demo2" class="page1"></div>
+		</div>
+	</div>
+	<div class="bloc">
+		<div class="title"> 用户信息管理 </div>
+		<div class="content">
+			<table>
+				<thead>
+					<tr>
+						<th>序号</th>
+						<th>登录名</th>
+						<th>姓名</th>
+						<th>性别</th>
+						<th>生日</th>
+						<th>地址</th>
+						<th>联系方式</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody class="btbody2">
+					
+				</tbody>
+			</table>
+			<div id="demo2" class="page2"></div>
+			
+		</div>
+	</div>
+	
+</div>
+</body>
+</html>

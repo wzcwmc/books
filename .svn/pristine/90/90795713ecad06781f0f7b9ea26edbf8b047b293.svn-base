@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Your Admin Panel</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+<!-- jQuery AND jQueryUI -->
+<script type="text/javascript" src="js/libs/jquery/1.6/jquery.min.js"></script>
+<script type="text/javascript" src="js/libs/jqueryui/1.8.13/jquery-ui.min.js"></script>
+
+<!-- Compressed Version
+        <link type="text/css" rel="stylesheet" href="min/b=CoreAdmin&f=css/reset.css,css/style.css,css/jqueryui/jqueryui.css,js/jwysiwyg/jquery.wysiwyg.old-school.css,js/zoombox/zoombox.css" />
+        <script type="text/javascript" src="min/b=CoreAdmin/js&f=cookie/jquery.cookie.js,jwysiwyg/jquery.wysiwyg.js,tooltipsy.min.js,iphone-style-checkboxes.js,excanvas.js,zoombox/zoombox.js,visualize.jQuery.js,jquery.uniform.min.js,main.js"></script>
+        -->
+<link rel="stylesheet" href="css/min.css" />
+<script type="text/javascript" src="js/min.js"></script>
+<script type="text/javascript" src="content/settings/main.js"></script>
+<link rel="stylesheet" href="content/settings/style.css" />
+<link href="css/style_jPaginate.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/jquery.paginate.js"></script>
+
+<script type="text/javascript">
+
+	//页容量
+	var pageSize1=5;
+	var pageSize2=8;
+	//总页数
+	var pageCount1;
+	var pageCount1;
+
+	$(function(){
+		$.ajax({
+			url:"WelcomeServlet?type=manger",
+			data:"",
+			type:"post",
+			datatype:"text",
+			success: function(result) {
+				$(".user").html(result);
+			}
+			
+			//获取总页数
+   			getPageCounts();
+   			
+		});
+
+   function getPageCounts(){
+   	var jsonStr1={pSize1:pageSize1};
+   	var jsonStr2={pSize2:pageSize2};
+   	$.post("GetPageCountServlet?type=book",
+   			jsonStr1,
+   			function(data) {
+   				var str=$.parseJSON(data);
+   				pageCount1=str.pcount;
+   				/*调用进行分页的方法*/
+    			setPages1();
+   			});
+   	
+   	$.post("GetPageCountServlet?type=reader",
+   			jsonStr2,
+   			function(data) {
+   				var str=$.parseJSON(data);
+   				pageCount2=str.pcount;
+   				/*调用进行分页的方法*/
+    			setPages2();
+   			});
+   }
+   /*分页的函数*/
+   function setPages1(){
+   	$(".page1").paginate({
+    			count : pageCount, //${6}此处要写清本次分页的总页数,不支持动态改变,不可写非int型数.个人建议在进入页面的时候就把页数传过来
+    			start : 1, //开始页码,从1开始,一般设置成1
+    			display : 6, //在分页条上显示的个数,分页数等于或超过本设置会显示设置的个数,不够的话会显示真实个数,不过就不会出现滚动效果了.
+    			border : false, //是否显示外框
+    			text_color : '#888', //文字颜色
+    			background_color : '#EEE', //背景颜色
+    			text_hover_color : 'black', //鼠标放上去时文字的颜色
+    			background_hover_color : '#CFCFCF',//鼠标放上去时背景的颜色
+    			rotate : true, //是否滚动
+    			images : false, //
+    			mouse : 'press', //可选值为'press'和'slide',具体差别请自己体验.
+    			onChange : function(page) {//本插件唯一可触发的事件,在点击页数的时候触发,只传过来当前被选中的页数,我想这其实足够了.
+    				getPageData1(page, pageSize1);
+    			}
+    		});
+    		//调用ajax异步实现每页的数据
+    		getPageData1(1, pageSize1);
+   }
+   
+   function getPageData1(pageIndex,pageSize){
+    		var jsonStr={
+    				start : pageIndex,
+    				pageSize : pageSize,
+    			};
+    		$.ajax({
+    			url : "PageServlet?type=book",
+    			type : "post",
+    			data : jsonStr,
+    			dataType : "json",
+    			timeout : 100000,
+    			error : function() {
+    				alert('请求超时，请稍候再试');
+    			},
+    			success : function(result) {
+    				var s = new StringBuffer();
+    				$.each(result, function(index, value) {
+    					s.append("<tr>").append("<td>").append((index + 1)).append(
+    							"</td>").append("<td class="picture" style="width:140px;">");
+    					s.append("<a href="#" class="zoombox">").append("<img src='");
+    					s.append(value.bookImg).append("' alt="" /></a></td>").append("<td>");
+    					s.append(value.bookName).append("</td>").append("<td>");
+    					s.append(value.author).append("</td>").append("<td>");
+    					s.append(value.publisher).append("</td>").append("<td>");
+    					s.append(value.bookType).append("</td>").append("<td>");
+    					s.append(value.bookNum).append("</td>").append("<td>");
+    					s.append(value.lendNum).append("</td>").append("<td>");
+    					s.append(value.nowNum).append("</td>").append("<td class="actions">");
+    					s.append("<a href='#' title='编辑'><img src='img/icons/actions/edit.png' alt='' /></a>");
+    					s.append("<a href='#' title='删除'><img src='img/icons/actions/delete.png' alt='' /></a>");
+    					s.append("</td>").append("</tr>");
+    				});
+    				$("#btbody").html(s.toString());
+    			}
+    		});
+    	}
+    	
+    	function StringBuffer() {
+    		this.__string__ = new Array();
+    	}
+    	StringBuffer.prototype.append = function(str) {
+    		this.__string__.push(str);
+    		return this;
+    	};
+    	StringBuffer.prototype.toString = function() {
+    		return this.__string__.join("");
+    	};
+		
+		
+	});
+	
+
+
+</script>
+
+</head>
+<body>
+
+<div class="settings" id="settings">
+	<div class="wrapper">
+		<div class="grid3">
+			<div class="titre">Backgrounds</div>
+			<a href="url(css/img/bg.html" class="backgroundChanger active" title="White"></a> <a href="url(css/img/dark-bg.html" class="backgroundChanger dark" title="Dark"></a> <a href="url(css/img/wood.html" class="backgroundChanger dark" title="Wood"></a> <a href="url(css/img/altbg/smoothwall.html" class="backgroundChanger" title="Smoothwall"></a> <a href="url(css/img/altbg/black_denim.html" class="backgroundChanger dark" title="black_denim"></a> <a href="url(css/img/altbg/carbon.html" class="backgroundChanger dark" title="Carbon"></a> <a href="url(css/img/altbg/double_lined.html" class="backgroundChanger" title="Double lined"></a>
+			<div class="clear"></div>
+		</div>
+		<div class="grid3">
+			<div class="titre">Bloc style</div>
+			<a href="black.html" class="blocChanger" title="Black" style="background:url(css/img/bloctitle.png);"></a> <a href="white.html" class="blocChanger active" title="White" style="background:url(css/img/white-title.png);"></a> <a href="wood.html" class="blocChanger" title="Wood" style="background:url(css/img/wood-title.jpg);"></a>
+			<div class="clear"></div>
+		</div>
+		<div class="grid3">
+			<div class="titre">Sidebar style</div>
+			<a href="grey.html" class="sidebarChanger active" title="Grey" style="background:#494949"></a> <a href="black.html" class="sidebarChanger" title="Black" style="background:#262626"></a> <a href="white.html" class="sidebarChanger" title="White" style="background:#EEEEEE"></a>
+			<div class="clear"></div>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<a class="settingbutton" href="#"> </a> </div>
+<!--              
+                HEAD
+                        -->
+<div id="head">
+	<div class="left"> <a href="#" class="button profile"><img src="img/icons/top/huser.png" alt="" /></a> Hi, <a href="#" class="user"></a> | <a href="ExitServlet?type=manger">退出</a> </div>
+	<div class="right">
+		<form action="#" id="search" class="search placeholder">
+			<label>Looking for something ?</label>
+			<input type="text" value="" name="q" class="text"/>
+			<input type="submit" value="rechercher" class="submit"/>
+		</form>
+	</div>
+</div>
+
+<!--            
+                SIDEBAR
+                         -->
+<div id="sidebar">
+	<ul>
+		<li> <a href="adminIndex.html"> <img src="img/icons/menu/inbox.png" alt="" /> Mini 书屋 </a> </li>
+		<li class="current"><a href="#"><img src="img/icons/menu/layout.png" alt="" /> 管理 </a>
+			<ul>
+				
+				<li class="current"><a href="adminShow.html"> 信息明细 </a></li>
+				<li><a href="#">Gallery</a></li>
+				<li><a href="#">Forms</a></li>
+				<li><a href="#">Icons</a></li>
+				
+			</ul>
+		</li>
+		<li><a href="#"><img src="img/icons/menu/brush.png" alt="" /> 未来功能 3Q</a>
+			<ul>
+				<li><a href="#"> 未来功能 3Q</a></li>
+				<li><a href="#"> 未来功能 3Q</a></li>
+				<li><a href="#"> 未来功能 3Q</a></li>
+			</ul>
+		</li>
+		<li><a href="#"><img src="img/icons/menu/brush.png" alt="" /> 未来功能 3Q</a>
+			<ul>
+				<li><a href="#"> 未来功能 3Q</a></li>
+				<li><a href="#"> 未来功能 3Q</a></li>
+				<li><a href="#"> 未来功能 3Q</a></li>
+			</ul>
+		</li>
+	</ul>
+</div>
+
+<!--            
+              CONTENT 
+                        -->
+<div id="content" class="white">
+	<h1><img src="img/icons/posts.png" alt="" /> 信息列表 </h1>
+	<div class="bloc">
+		<div class="title"> 图书信息管理 </div>
+		<div class="content">
+			<table>
+				<thead>
+					<tr>
+						<th>Picture</th>
+						<th>Title</th>
+						<th>Link</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tbody class="btbody">
+					
+				</tbody>
+			</table>
+			<div id="demo2" class="page1"></div>
+		</div>
+	</div>
+	<div class="bloc">
+		<div class="title"> Table Content </div>
+		<div class="content">
+			<table>
+				<thead>
+					<tr>
+						<th><input type="checkbox" class="checkall"/></th>
+						<th>Title</th>
+						<th>Author</th>
+						<th>Catégories</th>
+						<th>Tags</th>
+						<th><img src="img/th-comment.png" alt="" /></th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td><input type="checkbox" /></td>
+						<td><a href="#">Lorem ipsum</a></td>
+						<td><a href="#">Grafikart</a></td>
+						<td><a href="#">Dolor</a> , <a href="#">Amet</a></td>
+						<td><a href="#">Consecte</a> , <a href="#">Adipiscin</a>, <a href="#">Elit</a></td>
+						<td>35</td>
+						<td class="actions"><a href="#" title="Edit this content"><img src="img/icons/actions/edit.png" alt="" /></a><a href="#" title="Delete this content"><img src="img/icons/actions/delete.png" alt="" /></a></td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="left input">
+				<select name="action" id="tableaction">
+					<option value="">Action</option>
+					<option value="delete">Delete</option>
+				</select>
+			</div>
+			<div class="pagination"> <a href="#" class="prev">«</a> <a href="#">1</a> <a href="#" class="current">2</a> ... <a href="#">21</a> <a href="#">22</a> <a href="#" class="next">»</a> </div>
+		</div>
+	</div>
+	
+</div>
+</body>
+</html>

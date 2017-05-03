@@ -1,0 +1,66 @@
+package com.servlet;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Date;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.biz.ReaderBiz;
+import com.biz.impl.ReaderBizImpl;
+import com.entity.Reader;
+
+public class ReaderUpdateServlet extends HttpServlet {
+
+	
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		doPost(request, response);
+	}
+
+	
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		request.setCharacterEncoding("UTF-8");
+		
+		ReaderBiz readerBiz=new ReaderBizImpl();
+		
+		int reaId=Integer.parseInt(request.getParameter("reaId"));
+		String loginPwd=request.getParameter("loginPwd");
+		String loginId=request.getParameter("loginId");
+		String reaName=request.getParameter("reaName");
+		String gender=request.getParameter("gender");
+		Date birthday=java.sql.Date.valueOf(request.getParameter("birthday"));
+		String address=request.getParameter("address");
+		String phone=request.getParameter("phone");
+		
+		
+		Reader reader=new Reader();
+		
+		reader.setReaId(reaId);
+		reader.setBirthday(birthday);
+		reader.setGender(gender);
+		reader.setLoginId(loginId);
+		reader.setLoginPwd(loginPwd);
+		reader.setPhone(phone);
+		reader.setReaName(reaName);
+		reader.setAddress(address);
+		
+		int res = readerBiz.updateReader(reader, reader.getreaId());
+		if (res > 0) {
+			PrintWriter out = response.getWriter();
+			out.write("<script type='text/javascript'>alert('更新成功O(∩_∩)O');location.href='adminShow.html';</script>");
+		} else {
+			PrintWriter out = response.getWriter();
+			out.write("<script type='text/javascript'>alert('更新期间发生不可预知错误');location.href='adminShow.html';</script>");
+			out.flush();
+			out.close();
+		}
+	}
+
+}

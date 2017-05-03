@@ -1,0 +1,28 @@
+package com.biz;
+
+import java.util.List;
+
+import com.entity.Mark;
+
+public interface MarkBiz {
+	/**
+	  * 查询所有借书记录  （分页查询）
+	  * @return  借书记录集合
+	  */
+	   public List<Mark> getMarkAll(int pageIndex,int pageSize);
+	   /**
+	    * 根据ReaId查询借书记录  （分页查询）
+	    * @return  借书记录集合
+	    */
+	   public List<Mark> getMarkByReaId(int pageIndex,int pageSize,int redId);
+	   /**
+	    * 根据BookId查询借书记录  （分页查询）
+	    * @return  借书记录集合
+	    */
+	   public List<Mark> getMarkByBookId(int pageIndex,int pageSize,int bookId);
+	   /**
+	    * 获取总页数
+	    * @return 总页数
+	    */
+	   public int getMarkPages(int pageSize);
+}

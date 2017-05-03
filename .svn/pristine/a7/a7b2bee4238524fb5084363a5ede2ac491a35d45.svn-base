@@ -1,0 +1,67 @@
+package com.servlet;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.biz.BookBiz;
+import com.biz.MarkBiz;
+import com.biz.impl.BookBizImpl;
+import com.biz.impl.MarkBizIpml;
+import com.entity.Book;
+import com.entity.Mark;
+
+public class IndexServlet extends HttpServlet {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6418830650105091230L;
+
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		doPost(request, response);
+	}
+
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
+		int pageIndex=1;
+		int pageSize=8;
+		if(request.getParameter("pIndex")!=null)
+    	{
+    		pageIndex=Integer.parseInt(request.getParameter("pIndex"));
+    	}
+		
+		List<Book> listOne = new ArrayList<Book>();
+		List<Book> listTwo = new ArrayList<Book>();
+		List<Mark> listThree = new ArrayList<Mark>();
+		
+		BookBiz bookBiz = new BookBizImpl();
+		MarkBiz markBiz = new MarkBizIpml();
+		
+		listOne = bookBiz.getBookByLendNum();
+		listTwo = bookBiz.getBookByInnerDate();
+		
+		request.setAttribute("listOne", listOne);
+		request.setAttribute("listTwo", listTwo);
+		
+		String user=request.getParameter("user");
+		if (user.equals("mang")) {
+			listThree = markBiz.getMarkAll(pageIndex, pageSize);
+			request.setAttribute("listThree", listThree);
+			request.getRequestDispatcher("adminIndex.jsp").forward(request, response);
+		}else if(user.equals("reader")){
+			request.getRequestDispatcher("readerIndex.jsp").forward(request, response);
+		}
+	}
+
+}

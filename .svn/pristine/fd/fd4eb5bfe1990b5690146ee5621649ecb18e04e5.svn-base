@@ -1,0 +1,13 @@
+package com.dao.impl;
+
+import com.dao.AdminDao;
+import com.entity.Mang;
+
+public class AdminDaoImpl implements AdminDao {
+
+	@Override
+	public Mang getMangByName() {
+		return null;
+	}
+
+}

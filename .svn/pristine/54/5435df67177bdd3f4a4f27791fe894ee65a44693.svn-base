@@ -1,0 +1,168 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%
+String path = request.getContextPath();
+String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+%>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <base href="<%=basePath%>">
+    
+    <title>Mini DBMS readerIndex.jsp </title>
+    
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="expires" content="0">    
+	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+	<meta http-equiv="description" content="This is my page">
+	<!-- jQuery AND jQueryUI -->
+<script type="text/javascript" src="js/libs/jquery/1.6/jquery.min.js"></script>
+<script type="text/javascript" src="js/libs/jqueryui/1.8.13/jquery-ui.min.js"></script>
+
+<link rel="stylesheet" href="css/min.css" />
+<script type="text/javascript" src="js/min.js"></script>
+<script type="text/javascript" src="content/settings/main.js"></script>
+<link rel="stylesheet" href="content/settings/style.css" />
+
+<style type="text/css">
+	.content p #lot{
+		color:green;
+		font-size:14px;
+		text-decoration:none;
+		padding-right: 20px;	
+	}
+	.content p #lot:hover{
+		color:#666;
+		text-decoration:underline;
+		padding-right: 20px;	
+	}
+	
+</style>
+
+	<script type="text/javascript">
+		window.onload=function(){
+			var user = document.getElementById("user").innerText;
+			if(user==""){
+				location="readerLogin.html";
+			};
+		};
+	</script>
+	
+</head>
+  
+  <body>
+  
+<!--              
+                HEAD
+                        -->
+<div id="head">
+	<div class="left"> <a href="#" class="button profile"><img src="img/icons/top/huser.png" alt="" /></a>
+		 Hi, <a href="#" id="user">${sessionScope.user.loginId }</a> | <a href="ExitServlet?type=reader" id="exit">退出</a> </div>
+	
+</div>
+
+<!--            
+                SIDEBAR
+                         -->
+<div id="sidebar">
+	<ul>
+		<li class="current"> <a href="IndexServlet?user=reader"> <img src="img/icons/menu/home.png" alt="" /> Mini 书屋 </a> </li>
+		<li><a href="#"><img src="img/icons/menu/books.png" alt="" />我的书屋</a>
+			<ul>
+				<li><a href="readerShow.html">图书信息</a></li>
+				<li><a href="readerMark.html">我的记录</a></li>
+			</ul>
+		</li>
+		<li><a href="#"><img src="img/icons/menu/search.png" alt="" /> 查询</a>
+			<ul>
+				<li><a href="search.html"> 查询图书</a></li>
+			</ul>
+		</li>
+		<li><a><img src="img/icons/menu/brush.png" alt="" /> 未来功能 3Q</a>
+		</li>
+	</ul>
+</div>
+
+<!--            
+              CONTENT 
+                        -->
+<div id="content" class="white">
+	<h1><img src="img/icons/home.png" alt="" /> Mini 书屋首页 </h1>
+	<div class="bloc left">
+		<div class="title"> 馆长推荐 </div>
+		<div class="content dashboard">
+			<div class="center">
+				<c:forEach items="${requestScope.listOne }" var="book">
+				<img  class="shortcut last"  src="${book.bookImg }" alt="图片暂无" title="${book.bookName }" />
+				</c:forEach>
+				<div class="cb"></div>
+			</div>
+			<p style="text-align: right;"><a id="lot" href="readerShow.html" style="font-family:'华文行楷';">更多...</a></p>
+		</div>
+	</div>
+	<div class="bloc right">
+		<div class="title"> 新书上架 </div>
+		<div class="content">
+			<div class="left">
+				<table class="noalt">
+					<thead>
+						<tr>
+							<th><em>书名</em></th>
+							<th><em>类型</em></th>
+						</tr>
+					</thead>
+					<tbody>
+						<c:forEach items="${listTwo }" var="book">
+							<tr>
+								<td style="font: italic 18px '楷体';">${book.bookName }</td>
+								<td style="font: 16px '仿宋';">${book.bookType }</td>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
+			</div>
+			<div class="right">
+				<table class="noalt">
+					<thead>
+						<tr>
+							<th><em>作者</em></th>
+							<th><em>进屋日期</em></th>
+						</tr>
+					</thead>
+					<tbody>
+						<c:forEach items="${listTwo }" var="book">
+							<tr>
+								<td style="font: 14px '叶根友毛笔行书2.0版';">${book.author }</td>
+								<td style="font: 14px 'Times New Roman';">${book.innerDate }</td>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
+			</div>
+			<div class="cb"></div>
+		</div>
+	</div>
+	<div class="cb"></div>
+	
+	<div class="bloc">
+		<div class="title"> Mini 书屋公告</div>
+		<div class="content" > 
+		<div>
+		<p style="font-size: 20px; font-family: '华文行楷';text-indent: 2em;">读书使人充实，讨论使人机智，笔记使人准确，读史使人明智，读诗使人灵秀，
+		数学使人周密，科学使人深刻，伦理使人庄重，逻辑修辞使人善辩。凡有所学，皆成性格。</p>
+		<p style="font-size: 20px; font-family: '华文行楷';text-indent: 40em;">—— 培根</p>
+		
+		</div>
+		<div style="text-align: center;">
+		<img alt=""  class="shortcut last" style=" width:30%; height: 25%;padding: 0px;" src="images/dushu.jpg"/>
+		 <img alt=""  class="shortcut last" style=" width:30%; height: 25%;padding: 0px;" src="images/chengxin.jpg" />
+		 <img alt=""  class="shortcut last" style=" width:30%; height: 25%;padding: 0px;" src="images/pinde.jpg"/>
+		 </div>
+			<div class="cb"></div>
+		</div>
+	</div>
+</div>
+  </body>
+</html>

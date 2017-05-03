@@ -1,0 +1,101 @@
+package com.entity;
+
+import java.util.Date;
+
+/**
+ * 记录实体类  作用：数据的载体
+ */
+
+
+public class Mark {
+
+	private int reaId; // 读者编号
+	private String loginId; //登录名    辅助列
+	private int bookId; // 图书编号
+	private String bookName;//图书名    辅助列
+	private Date lendDate; // 借出日期
+	private Date backDate;// 返还日期
+	private String phone;//电话    辅助列
+	private int isBack;//是否归还
+
+	
+	
+	public String getLoginId() {
+		return loginId;
+	}
+
+	public void setLoginId(String loginId) {
+		this.loginId = loginId;
+	}
+
+	public String getBookName() {
+		return bookName;
+	}
+
+	public void setBookName(String bookName) {
+		this.bookName = bookName;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public int getReaId() {
+		return reaId;
+	}
+
+	public void setReaId(int reaId) {
+		this.reaId = reaId;
+	}
+
+	public int getBookId() {
+		return bookId;
+	}
+
+	public void setBookId(int bookId) {
+		this.bookId = bookId;
+	}
+
+	public Date getLendDate() {
+		return lendDate;
+	}
+
+	public void setLendDate(Date lendDate) {
+		this.lendDate = lendDate;
+	}
+
+	public Date getBackDate() {
+		return backDate;
+	}
+
+	public void setBackDate(Date backDate) {
+		this.backDate = backDate;
+	}
+
+	public int isBack() {
+		return isBack;
+	}
+
+	public void setBack(int isBack) {
+		this.isBack = isBack;
+	}
+
+	public Mark(int reaId, int bookId,Date lendDate, Date backDate, int isBack)
+	{
+		super();
+		this.reaId = reaId;
+		this.bookId = bookId;
+		this.lendDate = lendDate;
+		this.backDate = backDate;
+		this.isBack = isBack;
+	}
+
+	public Mark() {
+		super();
+	}
+
+}

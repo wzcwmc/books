@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Mini 书屋 个人借书记录</title>
+
+<meta name="keywords" content="keyword1,keyword2,keyword3">
+<meta name="description" content="this is my page">
+<meta name="content-type" content="text/html; charset=UTF-8">
+
+<!-- jQuery AND jQueryUI -->
+<script type="text/javascript" src="js/libs/jquery/1.6/jquery.min.js"></script>
+<script type="text/javascript" src="js/libs/jqueryui/1.8.13/jquery-ui.min.js"></script>
+
+<link rel="stylesheet" href="css/min.css" />
+<script type="text/javascript" src="js/min.js"></script>
+<script type="text/javascript" src="content/settings/main.js"></script>
+<link rel="stylesheet" href="content/settings/style.css" />
+
+<link href="css/style_jPaginate.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/jquery.paginate.js"></script>
+
+
+<script type="text/javascript">
+	//页容量
+	var pageSize = 10;
+	//总页数
+	var pageCount;
+
+	$(function() {
+		$.ajax({
+			url : "WelcomeServlet?type=reader",
+			data : "",
+			type : "post",
+			datatype : "text",
+			success : function(result) {
+				$(".user").html(result);
+				
+			}
+		});
+		getPageCounts();
+	});
+	
+	function getPageCounts() {
+
+		var jsonStr = {
+			pSize : pageSize,
+			type : 'reMark'
+		};
+		$.post("GetPageCountServlet", jsonStr, function(data) {
+			var str = $.parseJSON(data);
+			pageCount = str.pcount;
+			/*调用进行分页的方法*/
+			setPages();
+		});
+
+	}
+	/*分页的函数*/
+	function setPages() {
+		$(".page").paginate({
+			count : pageCount, //${6}此处要写清本次分页的总页数,不支持动态改变,不可写非int型数.个人建议在进入页面的时候就把页数传过来
+			start : 1, //开始页码,从1开始,一般设置成1
+			display : 6, //在分页条上显示的个数,分页数等于或超过本设置会显示设置的个数,不够的话会显示真实个数,不过就不会出现滚动效果了.
+			border : false, //是否显示外框
+			text_color : '#888', //文字颜色
+			background_color : '#EEE', //背景颜色
+			text_hover_color : 'black', //鼠标放上去时文字的颜色
+			background_hover_color : '#CFCFCF',//鼠标放上去时背景的颜色
+			rotate : true, //是否滚动
+			images : false, //
+			mouse : 'press',//可选值为'press'和'slide',具体差别请自己体验
+			onChange : function(page) {//本插件唯一可触发的事件,在点击页数的时候触发,只传过来当前被选中的页数,我想这其实足够了.
+				getPageData(page, pageSize);
+			}
+		});
+		//调用ajax异步实现每页的数据
+		getPageData(1, pageSize);
+	}
+	function getPageData(pageIndex, pageSize) {
+		var jsonStr = {
+			start : pageIndex,
+			pageSize : pageSize,
+			type : 'reMark'
+
+		};
+		$.ajax({
+			url : "PageServlet",
+			type : "post",
+			data : jsonStr,
+			dataType : "json",
+			timeout : 100000,
+			error : function() {
+				alert('请求超时，请稍候再试');
+			},
+			success : function(result) {
+				var s = new StringBuffer();
+				$.each(result,
+						function(index, value) {
+							s.append("<tr>").append("<td>").append((index + 1))
+									.append("</td>").append("<td>");
+							s.append("<a href='#' class='zoombox'>");
+							s.append(value.bookName).append("</a></td>").append("<td>");
+							var lendDate = toDates(value.lendDate.time);
+							s.append(lendDate.getFullYear()+"-").append(lendDate.getMonth()+1+"-").append(lendDate.getDate());
+							s.append("</td>").append("<td>");
+							var backDate = toDates(value.backDate.time);
+							s.append(backDate.getFullYear()+"-").append(backDate.getMonth()+1+"-").append(backDate.getDate());
+							s.append("</td>").append("<td>");
+							s.append(value.back).append("</td>").append(
+									"</tr>");
+						});
+				$(".mytbody").html(s.toString());
+			}
+		});
+	}
+	
+	function toDates(dateStr){
+	 //js 日期格式
+	 var newTime = new Date(dateStr); 
+	 return newTime;//返回js日期格式
+  	}
+	function StringBuffer() {
+		this.__string__ = new Array();
+	}
+	StringBuffer.prototype.append = function(str) {
+		this.__string__.push(str);
+		return this;
+	};
+	StringBuffer.prototype.toString = function() {
+		return this.__string__.join("");
+	};
+</script>
+
+</head>
+
+<body>
+	<!--              
+                HEAD
+                        -->
+	<div id="head">
+		<div class="left">
+			<a href="#" class="button profile"><img src="img/icons/top/huser.png" alt="" /></a>
+			 Hi,<a href="#" class="user"></a> | <a href="ExitServlet?type=reader">退出</a>
+		</div>
+		<div class="right">
+			<form action="#" id="search" class="search placeholder">
+				<label> 搜搜看 总有你需要的 O(∩_∩)O </label> <input type="text" value=""
+					name="q" class="text" /> <input type="submit" value="rechercher"
+					class="submit" />
+			</form>
+		</div>
+	</div>
+
+	<div id="sidebar">
+		<ul>
+			<li><a href="index.html"> <img
+					src="img/icons/menu/inbox.png" alt="" /> Mini 书屋
+			</a></li>
+			<li class="current"><a href="#"><img
+					src="img/icons/menu/layout.png" alt="" /> 我的书屋</a>
+				<ul>
+					<li><a href="readerShow.html">图书信息</a></li>
+					<li class="current"><a href="#">我的记录</a></li>
+				</ul></li>
+			<li><a href="#"><img src="img/icons/menu/brush.png" alt="" />
+					未来功能 3Q</a>
+				<ul>
+					<li><a href="#"> 未来功能 3Q</a></li>
+					<li><a href="#"> 未来功能 3Q</a></li>
+					<li><a href="#"> 未来功能 3Q</a></li>
+				</ul></li>
+			<li><a href="#"><img src="img/icons/menu/brush.png" alt="" />
+					未来功能 3Q</a>
+				<ul>
+					<li><a href="#"> 未来功能 3Q</a></li>
+					<li><a href="#"> 未来功能 3Q</a></li>
+					<li><a href="#"> 未来功能 3Q</a></li>
+				</ul></li>
+		</ul>
+	</div>
+	<div id="content" class="white">
+		<h1><img src="img/icons/posts.png" alt="" /> 信息列表 </h1>
+		<div class="bloc">
+			<div class="title"> 图书信息管理 </div>
+			<div class="content">
+				<table>
+					<thead>
+						<tr>
+							<th>序号</th>
+							<th>书名</th>
+							<th>借书日期</th>
+							<th>归还日期</th>
+							<th>是否归还</th>
+						</tr>
+					</thead>
+					<tbody class="mytbody">
+					</tbody>
+				</table>
+				<div id="demo2" class="page"></div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

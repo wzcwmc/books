@@ -1,0 +1,102 @@
+package com.dao.impl;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.dao.AdminDao;
+import com.entity.Book;
+import com.entity.Mang;
+import com.utils.DBUtils;
+
+public class AdminDaoImpl implements AdminDao {
+     Connection conn =null;
+     PreparedStatement psmt=null;
+     ResultSet rs=null;
+     DBUtils dbu= new DBUtils();
+	@Override
+	public Mang getMangByName(String mangName) {
+		String sql=" select mangid, mangname, mangpwd from mang  where mangname=? ";
+		Mang admin= new Mang();
+		conn=dbu.getConn();
+		try {
+			psmt=conn.prepareStatement(sql);
+			psmt.setString(1, "mangName");
+			rs=psmt.executeQuery();
+			if(rs.next()){
+				admin.setMangId(rs.getInt("mangid"));
+				admin.setMangName(rs.getString("mangname"));
+				admin.setMangPwd(rs.getString("mangpwd"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally{
+			dbu.closeAll(rs, psmt, conn);
+		}
+		return admin;
+	}
+
+	@Override
+	public List<Book> getBookBySQL(String sql, Object... obj) {
+		List<Book> list= new ArrayList<Book>();
+		conn=dbu.getConn();
+		try {
+			psmt=conn.prepareStatement(sql);
+			if(obj.length>0){
+				for (int i = 0; i < obj.length; i++) {
+					psmt.setObject(i+1,obj[i]);
+				}
+			}
+			rs=psmt.executeQuery();
+			while(rs.next())
+			{
+				Book book =new Book();
+				book.setBookId(rs.getInt("bookId"));
+				book.setIsbn(rs.getString("isbn"));
+				book.setBookName(rs.getString("bookName"));
+				book.setAuthor(rs.getString("author"));
+				book.setPublisher(rs.getString("publisher"));
+				book.setPubDate(rs.getDate("pubDate"));
+				book.setBookType(rs.getString("bookType"));
+				book.setIntroduction(rs.getString("introduction"));
+				book.setPrice(rs.getString("price"));
+				book.setBookNum(rs.getInt("bookNum"));
+				book.setLendNum(rs.getInt("lendNum"));
+				book.setNowNum(rs.getInt("nowNum"));
+				book.setBookImg(rs.getString("bookImg"));
+				list.add(book);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally{
+			dbu.closeAll(rs, psmt, conn);
+		}
+		return list;
+	}
+
+	@Override
+	public List<Book> getBookByName(String bookName) {
+		StringBuffer sb= new StringBuffer();
+		sb.append(" select bookid, isbn, bookname, author, publisher, ");
+		sb.append(" pubdate, booktype, introduction, price, booknum,  ");
+		sb.append(" lendnum, nownum, bookimg from book ");
+		sb.append(" where bookname like '%'||?||'%' ");
+		
+		
+		return getBookBySQL(sb.toString(), bookName);
+	}
+
+	@Override
+	public List<Book> getBookBytype(String bookType) {
+		StringBuffer sb= new StringBuffer();
+		sb.append(" select bookid, isbn, bookname, author, publisher, ");
+		sb.append(" pubdate, booktype, introduction, price, booknum,  ");
+		sb.append(" lendnum, nownum, bookimg from book ");
+		sb.append(" where booktype like '%'||?||'%' ");
+		return getBookBySQL(sb.toString(), bookType);
+	}
+
+}

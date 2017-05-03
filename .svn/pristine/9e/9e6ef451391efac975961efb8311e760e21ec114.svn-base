@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	id="WebApp_ID" version="3.0">
+	<display-name>MiniBMS</display-name>
+	
+
+	<filter>
+		<filter-name>CharacterEncoding</filter-name>
+		<filter-class>com.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>Encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>CharacterEncoding</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+		<!-- 配置过滤器 begin -->
+	 <filter>
+		<filter-name>LoginFilter</filter-name>
+		<filter-class>com.filter.LoginFilter</filter-class>
+		<init-param>
+			<param-name>LoginPage</param-name>
+			<param-value>/readerLogin.html</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>LoginFilter</filter-name>
+		<url-pattern>*.html</url-pattern>
+	</filter-mapping>
+	
+	<filter-mapping>
+		<filter-name>LoginFilter</filter-name>
+		<url-pattern>*.jsp</url-pattern>
+	</filter-mapping> 
+	
+	<servlet>
+		<servlet-name>ReaderLoginServlet</servlet-name>
+		<servlet-class>com.servlet.ReaderLoginServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>AdminLoginServlet</servlet-name>
+		<servlet-class>com.servlet.AdminLoginServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>readerRegisterServlet</servlet-name>
+		<servlet-class>com.servlet.readerRegisterServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>ExitServlet</servlet-name>
+		<servlet-class>com.servlet.ExitServlet</servlet-class>
+	</servlet>
+
+	<servlet>
+		<servlet-name>IndexServlet</servlet-name>
+		<servlet-class>com.servlet.IndexServlet</servlet-class>
+	</servlet>
+  <servlet>
+    <servlet-name>ToAdminShowServlet</servlet-name>
+    <servlet-class>com.servlet.ToAdminShowServlet</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>GetPageCountServlet</servlet-name>
+    <servlet-class>com.servlet.GetPageCountServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>WelcomeServlet</servlet-name>
+    <servlet-class>com.servlet.WelcomeServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>PageServlet</servlet-name>
+    <servlet-class>com.servlet.PageServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>AddBookServlet</servlet-name>
+    <servlet-class>com.servlet.AddBookServlet</servlet-class>
+  </servlet>
+
+
+
+
+
+
+
+	<servlet-mapping>
+		<servlet-name>ReaderLoginServlet</servlet-name>
+		<url-pattern>/ReaderLoginServlet</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>AdminLoginServlet</servlet-name>
+		<url-pattern>/AdminLoginServlet</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ExitServlet</servlet-name>
+		<url-pattern>/ExitServlet</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>readerRegisterServlet</servlet-name>
+		<url-pattern>/readerRegisterServlet</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>IndexServlet</servlet-name>
+		<url-pattern>/IndexServlet</url-pattern>
+	</servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ToAdminShowServlet</servlet-name>
+    <url-pattern>/ToAdminShowServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>GetPageCountServlet</servlet-name>
+    <url-pattern>/GetPageCountServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>WelcomeServlet</servlet-name>
+    <url-pattern>/WelcomeServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>PageServlet</servlet-name>
+    <url-pattern>/PageServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>AddBookServlet</servlet-name>
+    <url-pattern>/AddBookServlet</url-pattern>
+  </servlet-mapping>
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+		<welcome-file>index.htm</welcome-file>
+		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>default.html</welcome-file>
+		<welcome-file>default.htm</welcome-file>
+		<welcome-file>default.jsp</welcome-file>
+	</welcome-file-list>
+</web-app>

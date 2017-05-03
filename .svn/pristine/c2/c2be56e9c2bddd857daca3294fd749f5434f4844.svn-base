@@ -1,0 +1,40 @@
+package com.biz.impl;
+
+import java.util.List;
+
+import com.biz.MarkBiz;
+import com.dao.MarkDao;
+import com.dao.impl.MarkDaoImpl;
+import com.entity.Mark;
+
+public class MarkBizIpml implements MarkBiz {
+    MarkDao markDao = new MarkDaoImpl();
+	@Override
+	public List<Mark> getMarkAll(int pageIndex, int pageSize) {
+		return markDao.getMarkAll(pageIndex, pageSize);
+	}
+
+	@Override
+	public List<Mark> getMarkByReaId(int pageIndex, int pageSize, int redId) {
+		return markDao.getMarkByReaId(pageIndex, pageSize, redId);
+	}
+
+	@Override
+	public List<Mark> getMarkByBookId(int pageIndex, int pageSize, int bookId) {
+		return markDao.getMarkByBookId(pageIndex, pageSize, bookId);
+	}
+
+	@Override
+	public int getMarkPages(int pageSize) {
+		int count=markDao.getMarkCounts();
+		int pages=0;
+		if(count%pageSize==0)
+		{
+			pages=count/pageSize;
+		}else{
+			pages=count/pageSize+1;
+		}
+		return pages;
+	}
+
+}

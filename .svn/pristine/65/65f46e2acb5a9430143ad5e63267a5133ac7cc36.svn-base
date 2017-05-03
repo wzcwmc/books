@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>search.html</title>
+	
+    <meta name="keywords" content="keyword1,keyword2,keyword3">
+    <meta name="description" content="this is my page">
+    <meta name="content-type" content="text/html; charset=UTF-8">
+    
+    <!-- jQuery AND jQueryUI -->
+<script type="text/javascript" src="js/libs/jquery/1.6/jquery.min.js"></script>
+<script type="text/javascript" src="js/libs/jqueryui/1.8.13/jquery-ui.min.js"></script>
+
+<link rel="stylesheet" href="css/min.css" />
+<script type="text/javascript" src="js/min.js"></script>
+<script type="text/javascript" src="content/settings/main.js"></script>
+<link rel="stylesheet" href="content/settings/style.css" />
+
+<link href="css/style_jPaginate.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/jquery.paginate.js"></script>
+
+  </head>
+  
+  <body>
+	<!--              
+                HEAD
+                        -->
+	<div id="head">
+		<div class="left">
+			<a href="#" class="button profile"><img src="img/icons/top/huser.png" alt="" /></a>
+			 Hi,<a href="#" class="user"></a> | <a href="ExitServlet?type=reader">退出</a>
+		</div>
+		<div class="right">
+			<form action="#" id="search" class="search placeholder">
+				<label> 搜搜看 总有你需要的 O(∩_∩)O </label> <input type="text" value=""
+					name="q" class="text" /> <input type="submit" value="rechercher"
+					class="submit" />
+			</form>
+		</div>
+	</div>
+
+	<div id="sidebar">
+		<ul>
+			<li><a href="IndexServlet?user=reader"> <img
+					src="img/icons/menu/inbox.png" alt="" /> Mini 书屋
+			</a></li>
+			<li><a href="#"><img
+					src="img/icons/menu/layout.png" alt="" /> 我的书屋</a>
+				<ul>
+					<li><a href="readerShow.html">图书信息</a></li>
+					<li><a href="readerMark.html">我的记录</a></li>
+				</ul></li>
+			<li class="current"><a href="#"><img src="img/icons/menu/brush.png" alt="" />
+					查询</a>
+				<ul>
+					<li class="current"><a href="#"> 查询图书</a></li>
+					<li><a href="#"> 未来功能 3Q</a></li>
+					<li><a href="#"> 未来功能 3Q</a></li>
+				</ul></li>
+			<li><a href="#"><img src="img/icons/menu/brush.png" alt="" />
+					未来功能 3Q</a>
+				<ul>
+					<li><a href="#"> 未来功能 3Q</a></li>
+					<li><a href="#"> 未来功能 3Q</a></li>
+					<li><a href="#"> 未来功能 3Q</a></li>
+				</ul></li>
+		</ul>
+	</div>
+	<div id="content" class="white">
+		<h1><img src="img/icons/posts.png" alt="" /> 查询列表 </h1>
+		<div class="bloc">
+			<div class="title"> 查询结果 </div>
+			<div class="content">
+				
+				<div id="demo2" class="page"></div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

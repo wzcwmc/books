@@ -1,0 +1,21 @@
+package com.biz;
+
+import java.util.List;
+import com.entity.Book;
+
+public interface BookBiz {
+
+	/**
+	 * 根据书名查询书籍信息
+	 * @param bookName
+	 * @return 书籍集合
+	 */
+	public List<Book> getBookByName(String bookName);
+
+	/**
+	 * 根据书籍类型查询书籍信息
+	 * @param bookType
+	 * @return 书籍集合
+	 */
+	public List<Book> getBookBytype(String bookType);
+}

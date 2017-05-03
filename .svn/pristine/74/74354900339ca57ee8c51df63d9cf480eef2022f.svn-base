@@ -1,0 +1,37 @@
+package com.biz.impl;
+
+import java.util.List;
+
+import com.biz.BookBiz;
+import com.dao.BookDao;
+import com.dao.impl.BookDaoImpl;
+import com.entity.Book;
+
+public class BookBizImpl implements BookBiz {
+
+	BookDao bookDao = new BookDaoImpl();
+	
+	@Override
+	public List<Book> getBookByName(String bookName) {
+		return bookDao.getBookByName(bookName);
+	}
+
+	@Override
+	public List<Book> getBookBytype(String bookType) {
+		return bookDao.getBookBytype(bookType);
+	}
+
+	@Override
+	public List<Book> getBookByLendNum() {
+		// TODO Auto-generated method stub
+		return bookDao.getBookByLendNum();
+	}
+
+	@Override
+	public List<Book> getBookByInnerDate() {
+		// TODO Auto-generated method stub
+		return bookDao.getBookByInnerDate();
+	}
+
+
+}

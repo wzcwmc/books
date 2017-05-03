@@ -1,0 +1,109 @@
+package com.dao.impl;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.dao.MarkDao;
+import com.entity.Mark;
+import com.utils.DBUtils;
+
+public class MarkDaoImpl implements MarkDao {
+	private Connection conn = null;
+	private PreparedStatement psmt = null;
+	private ResultSet rs = null;
+	DBUtils dbu = new DBUtils();
+
+	@Override
+	public List<Mark> getMarkAll(int pageIndex, int pageSize) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(" SELECT * ");
+		sb.append(" from (select tt.*  ");
+		sb.append(" from (select r.loginid,r.phone,b.bookname,m.*,ROWNUM AS rowno ");
+		sb.append(" from  mark m,reader r,book b ");
+		sb.append(" order by lendDate where m.reaid=r.reaid and m.bookid=b.bookid ) tt  ");
+		sb.append(" WHERE ROWNUM <= ");
+		sb.append(pageIndex * pageSize);
+		sb.append(" ) table_alias ");
+		sb.append(" WHERE table_alias.rowno >= ");
+		sb.append((pageIndex - 1) * pageSize + 1);
+		return getMarkBySQL(sb.toString());
+	}
+
+	@Override
+	public List<Mark> getMarkByReaId(int pageIndex, int pageSize,int redId) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(" SELECT * ");
+		sb.append(" from (select tt.*  ");
+		sb.append(" FROM (SELECT m.*, ROWNUM AS rowno ");
+		sb.append(" FROM mark m  ");
+		sb.append(" where reaaid= ? ");
+		sb.append(" ORDER BY lendDate) tt  ");
+		sb.append(" WHERE ROWNUM <= ");
+		sb.append(pageIndex * pageSize);
+		sb.append(" ) table_alias ");
+		sb.append(" WHERE table_alias.rowno >= ");
+		sb.append((pageIndex - 1) * pageSize + 1);
+		return getMarkBySQL(sb.toString(),redId);
+	}
+
+	@Override
+	public List<Mark> getMarkByBookId(int pageIndex, int pageSize,int bookId) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(" SELECT * ");
+		sb.append(" from (select tt.*  ");
+		sb.append(" FROM (SELECT m.*, ROWNUM AS rowno ");
+		sb.append(" FROM mark m  ");
+		sb.append(" where bookid= ? ");
+		sb.append(" ORDER BY lendDate) tt  ");
+		sb.append(" WHERE ROWNUM <= ");
+		sb.append(pageIndex * pageSize);
+		sb.append(" ) table_alias ");
+		sb.append(" WHERE table_alias.rowno >= ");
+		sb.append((pageIndex - 1) * pageSize + 1);
+		return getMarkBySQL(sb.toString(),bookId);
+	}
+
+	private List<Mark> getMarkBySQL(String sql, Object... obj) {
+		List<Mark> list = new ArrayList<Mark>();
+		conn = dbu.getConn();
+		try {
+			psmt = conn.prepareStatement(sql);
+			if (obj.length > 0) {
+				for (int i = 0; i < obj.length; i++) {
+					psmt.setObject(i + 1, obj[i]);
+				}
+			}
+			rs = psmt.executeQuery();
+			while (rs.next()) {
+			Mark mark= new Mark();
+			mark.setBookId(rs.getInt("bookId"));
+			mark.setReaId(rs.getInt("reaId"));
+			mark.setLendDate(rs.getDate("lendDate"));
+			mark.setBackDate(rs.getDate("backDate"));
+			mark.setBack(rs.getInt("isback"));
+			if(sql.contains("bookname"))
+			{
+				mark.setBookName(rs.getString("bookname"));
+			}
+			if(sql.contains("loginid"))
+			{
+				mark.setLoginId(rs.getString("loginid"));
+			}
+			if(sql.contains("phone"))
+			{
+				mark.setPhone(rs.getString("phone"));
+			}
+			list.add(mark);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbu.closeAll(rs, psmt, conn);
+		}
+		return list;
+	}
+}

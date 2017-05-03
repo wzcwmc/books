@@ -1,0 +1,78 @@
+package com.biz.impl;
+
+import java.util.List;
+
+import com.biz.BookBiz;
+import com.dao.BookDao;
+import com.dao.impl.BookDaoImpl;
+import com.entity.Book;
+
+public class BookBizImpl implements BookBiz {
+
+	BookDao bookDao = new BookDaoImpl();
+	
+	@Override
+	public List<Book> getBookByName(String bookName) {
+		return bookDao.getBookByName(bookName);
+	}
+
+	@Override
+	public List<Book> getBookBytype(String bookType) {
+		return bookDao.getBookBytype(bookType);
+	}
+
+	@Override
+	public List<Book> getBookByLendNum() {
+		return bookDao.getBookByLendNum();
+	}
+
+	@Override
+	public List<Book> getBookByInnerDate() {
+		return bookDao.getBookByInnerDate();
+	}
+
+	@Override
+	public List<Book> getBookByString(String str,int pageIndex, int pageSize ) {
+		return bookDao.getBookByString(str,pageIndex,pageSize );
+	}
+
+	@Override
+	public List<Book> getBookById(int bookId) {
+		return bookDao.getBookById(bookId);
+	}
+
+	@Override
+	public int getBookPages(int pageSize) {
+		int count=bookDao.getBookCounts();
+		int pages=0;
+		if(count%pageSize==0)
+		{
+			pages=count/pageSize;
+		}else{
+			pages=count/pageSize+1;
+		}
+		return pages;
+	}
+
+	@Override
+	public List<Book> getBookAll(int pageIndex, int pageSize) {
+		return bookDao.getBookAll(pageIndex, pageSize);
+	}
+
+	@Override
+	public int addBook(Book book) {
+		return bookDao.addBook(book);
+	}
+
+	@Override
+	public int deleteBook(int bookId) {
+		return bookDao.deleteBook(bookId);
+	}
+
+	@Override
+	public int updateBook(Book book, int bookId) {
+		return bookDao.updateBook(book, bookId);
+	}
+
+
+}

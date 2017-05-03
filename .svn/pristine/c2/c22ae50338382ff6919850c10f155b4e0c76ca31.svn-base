@@ -1,0 +1,72 @@
+package com.entity;
+
+import java.util.Date;
+
+/**
+ * 记录实体类  作用：数据的载体
+ */
+
+
+public class Mark {
+
+	private int reaId; // 读者编号
+	private int bookId; // 图书编号
+	private Date lendDate; // 借出日期
+	private Date backDate;// 返还日期
+	private boolean isBack;//是否归还
+
+	public int getReaId() {
+		return reaId;
+	}
+
+	public void setReaId(int reaId) {
+		this.reaId = reaId;
+	}
+
+	public int getBookId() {
+		return bookId;
+	}
+
+	public void setBookId(int bookId) {
+		this.bookId = bookId;
+	}
+
+	public Date getLendDate() {
+		return lendDate;
+	}
+
+	public void setLendDate(Date lendDate) {
+		this.lendDate = lendDate;
+	}
+
+	public Date getBackDate() {
+		return backDate;
+	}
+
+	public void setBackDate(Date backDate) {
+		this.backDate = backDate;
+	}
+
+	public boolean isBack() {
+		return isBack;
+	}
+
+	public void setBack(boolean isBack) {
+		this.isBack = isBack;
+	}
+
+	public Mark(int reaId, int bookId, Date lendDate, Date backDate, boolean isBack) {
+		super();
+		this.reaId = reaId;
+		this.bookId = bookId;
+		this.lendDate = lendDate;
+		this.backDate = backDate;
+		this.isBack=isBack;
+	}
+
+	public Mark() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+}

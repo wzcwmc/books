@@ -1,0 +1,28 @@
+package com.biz.impl;
+
+import java.util.List;
+
+import com.biz.AdminBiz;
+import com.dao.AdminDao;
+import com.dao.impl.AdminDaoImpl;
+import com.entity.Book;
+import com.entity.Mang;
+
+public class AdminBizImpl implements AdminBiz {
+     AdminDao adDao= new AdminDaoImpl();
+	@Override
+	public Mang getMangByName(String mangName) {
+		return adDao.getMangByName(mangName);
+	}
+
+	@Override
+	public List<Book> getBookByName(String bookName) {
+		return adDao.getBookByName(bookName);
+	}
+
+	@Override
+	public List<Book> getBookBytype(String bookType) {
+		return adDao.getBookBytype(bookType);
+	}
+
+}

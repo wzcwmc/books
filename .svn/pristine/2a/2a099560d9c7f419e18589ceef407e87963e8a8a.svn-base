@@ -1,0 +1,30 @@
+package com.biz.impl;
+
+import java.util.List;
+
+import com.biz.ReaderBiz;
+import com.dao.ReaderDao;
+import com.dao.impl.ReaderDaoImpl;
+import com.entity.Reader;
+
+public class ReaderBizImpl implements ReaderBiz {
+
+	ReaderDao reaDao = new ReaderDaoImpl();
+	
+	@Override
+	public List<Reader> getReaders() {
+		// TODO Auto-generated method stub
+		return reaDao.getReaders();
+	}
+
+	@Override
+	public Reader getReaderByLoginId(String loginId,  String loginPwd) {
+		// TODO Auto-generated method stub
+		Reader reader = reaDao.getReaderByLoginId(loginId);
+		if (reader!=null&&reader.getLoginPwd().equals(loginPwd)) {
+			return reader;
+		}
+		return null;
+	}
+
+}

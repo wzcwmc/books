@@ -1,0 +1,21 @@
+package com.dao;
+
+import java.util.List;
+
+import com.entity.Reader;
+
+public interface ReaderDao {
+
+	
+	/**
+	 * 获取所有的读者信息列表
+	 * @return 读者信息集合
+	 */
+	public List<Reader> getReaders();
+	
+	/**
+	 * 根据登名获取读者信息
+	 * @return 读者对象
+	 */
+	public Reader getReaderByLoginId(String LoginId);
+}

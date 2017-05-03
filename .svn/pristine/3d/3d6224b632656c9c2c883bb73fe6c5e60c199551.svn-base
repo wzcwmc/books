@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Your Admin Panel</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+<!-- jQuery AND jQueryUI -->
+<script type="text/javascript" src="js/libs/jquery/1.6/jquery.min.js"></script>
+<script type="text/javascript" src="js/libs/jqueryui/1.8.13/jquery-ui.min.js"></script>
+
+<!-- Compressed Version
+        <link type="text/css" rel="stylesheet" href="min/b=CoreAdmin&f=css/reset.css,css/style.css,css/jqueryui/jqueryui.css,js/jwysiwyg/jquery.wysiwyg.old-school.css,js/zoombox/zoombox.css" />
+        <script type="text/javascript" src="min/b=CoreAdmin/js&f=cookie/jquery.cookie.js,jwysiwyg/jquery.wysiwyg.js,tooltipsy.min.js,iphone-style-checkboxes.js,excanvas.js,zoombox/zoombox.js,visualize.jQuery.js,jquery.uniform.min.js,main.js"></script>
+        -->
+<link rel="stylesheet" href="css/min.css" />
+<script type="text/javascript" src="js/min.js"></script>
+</head>
+<body>
+<script type="text/javascript" src="content/settings/main.js"></script>
+<link rel="stylesheet" href="content/settings/style.css" />
+<div class="settings" id="settings">
+	<a class="settingbutton" href="#"> </a> </div>
+<!--              
+                HEAD
+                        -->
+<div id="head">
+	<div class="left"> <a href="#" class="button profile"><img src="img/icons/top/huser.png" alt="" /></a> Hi, <a href="#">John Doe</a> | <a href="#">Logout</a> </div>
+	<div class="right">
+		<form action="#" id="search" class="search placeholder">
+			<label>Looking for something ?</label>
+			<input type="text" value="" name="q" class="text"/>
+			<input type="submit" value="rechercher" class="submit"/>
+		</form>
+	</div>
+</div>
+
+<!--            
+                SIDEBAR
+                         -->
+<div id="sidebar">
+	<ul>
+		<li> <a href="index.html"> <img src="img/icons/menu/inbox.png" alt="" /> Dashboard </a> </li>
+		<li class="current"><a href="#"><img src="img/icons/menu/layout.png" alt="" /> Elements</a>
+			<ul>
+				<li><a href="forms.html?p=forms">Forms</a></li>
+				<li class="current"><a href="table.html?p=table">Table</a></li>
+				<li><a href="gallery.html?p=gallery">Gallery</a></li>
+				<li><a href="icons.html?p=icons">Icons</a></li>
+			</ul>
+		</li>
+		<li><a href="#"><img src="img/icons/menu/brush.png" alt="" /> 未来功能 3Q</a>
+			<ul>
+				<li><a href="#"> 未来功能 3Q</a></li>
+				<li><a href="#"> 未来功能 3Q</a></li>
+				<li><a href="#"> 未来功能 3Q</a></li>
+			</ul>
+		</li>
+		<li><a href="#"><img src="img/icons/menu/brush.png" alt="" /> 未来功能 3Q</a>
+			<ul>
+				<li><a href="#"> 未来功能 3Q</a></li>
+				<li><a href="#"> 未来功能 3Q</a></li>
+				<li><a href="#"> 未来功能 3Q</a></li>
+			</ul>
+		</li>
+	</ul>
+</div>
+
+<!--            
+              CONTENT 
+                        -->
+<div id="content" class="white">
+	<h1><img src="img/icons/posts.png" alt="" /> Table</h1>
+	<div class="bloc">
+		<div class="title" id="head">
+			<div class="left"> Table Content with pictures </div>
+			<div class="right">
+				<form action="#" id="search" class="search placeholder">
+					<label>Looking for something ?</label>
+					<input type="text" value="" name="q" class="text"/>
+					<input type="submit" value="rechercher" class="submit"/>
+				</form>
+			</div>
+		</div>
+		<div class="content">
+			<table>
+				<thead>
+					<tr>
+						<th>Picture</th>
+						<th>Title</th>
+						<th>Link</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="picture" style="width:140px;"><a href="../../../lorempixum.com/800/600/food/0/index25b2.html?.jpg" class="zoombox"><img src="http://lorempixum.com/100/100/food/0" alt="" /></a></td>
+						<td><a href="#">Lorem ipsum</a></td>
+						<td>http://lorempixum.com/800/600/food/1</td>
+						<td class="actions"><a href="#" title="Edit this content"><img src="img/icons/actions/edit.png" alt="" /></a><a href="#" title="Delete this content"><img src="img/icons/actions/delete.png" alt="" /></a></td>
+					</tr>
+					<tr>
+						<td class="picture" style="width:140px;"><a href="../../../lorempixum.com/800/600/food/1/index25b2.html?.jpg" class="zoombox"><img src="http://lorempixum.com/100/100/food/1" alt="" /></a></td>
+						<td><a href="#">Lorem ipsum</a></td>
+						<td>http://lorempixum.com/800/600/food/1</td>
+						<td class="actions"><a href="#" title="Edit this content"><img src="img/icons/actions/edit.png" alt="" /></a><a href="#" title="Delete this content"><img src="img/icons/actions/delete.png" alt="" /></a></td>
+					</tr>
+					<tr>
+						<td class="picture" style="width:140px;"><a href="../../../lorempixum.com/800/600/food/2/index25b2.html?.jpg" class="zoombox"><img src="http://lorempixum.com/100/100/food/2" alt="" /></a></td>
+						<td><a href="#">Lorem ipsum</a></td>
+						<td>http://lorempixum.com/800/600/food/2</td>
+						<td class="actions"><a href="#" title="Edit this content"><img src="img/icons/actions/edit.png" alt="" /></a><a href="#" title="Delete this content"><img src="img/icons/actions/delete.png" alt="" /></a></td>
+					</tr>
+					<tr>
+						<td class="picture" style="width:140px;"><a href="../../../lorempixum.com/800/600/food/3/index25b2.html?.jpg" class="zoombox"><img src="http://lorempixum.com/100/100/food/3" alt="" /></a></td>
+						<td><a href="#">Lorem ipsum</a></td>
+						<td>http://lorempixum.com/800/600/food/3</td>
+						<td class="actions"><a href="#" title="Edit this content"><img src="img/icons/actions/edit.png" alt="" /></a><a href="#" title="Delete this content"><img src="img/icons/actions/delete.png" alt="" /></a></td>
+					</tr>
+					<tr>
+						<td class="picture" style="width:140px;"><a href="../../../lorempixum.com/800/600/food/4/index25b2.html?.jpg" class="zoombox"><img src="http://lorempixum.com/100/100/food/4" alt="" /></a></td>
+						<td><a href="#">Lorem ipsum</a></td>
+						<td>http://lorempixum.com/800/600/food/4</td>
+						<td class="actions"><a href="#" title="Edit this content"><img src="img/icons/actions/edit.png" alt="" /></a><a href="#" title="Delete this content"><img src="img/icons/actions/delete.png" alt="" /></a></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+</body>
+</html>

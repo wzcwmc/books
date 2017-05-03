@@ -1,0 +1,67 @@
+package com.servlet;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import net.sf.json.JSONObject;
+
+import com.biz.BookBiz;
+import com.biz.MarkBiz;
+import com.biz.ReaderBiz;
+import com.biz.impl.BookBizImpl;
+import com.biz.impl.MarkBizIpml;
+import com.biz.impl.ReaderBizImpl;
+
+public class GetPageCountServlet extends HttpServlet {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -425024495337896119L;
+
+	
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		doPost(request, response);
+	}
+
+	
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
+		
+		String type=request.getParameter("type");
+		//ªÒ»°“≥»›¡ø
+		int pageSize=Integer.parseInt(request.getParameter("pSize"));
+		int pCounts=1;
+		if (type.equals("mark")) {
+			MarkBiz mBiz = new MarkBizIpml();
+			pCounts = mBiz.getMarkPages(pageSize);
+		}else if (type.equals("reader")) {
+			ReaderBiz rBiz = new ReaderBizImpl();
+			pCounts = rBiz.getReaderPages(pageSize);
+		}else if (type.equals("book")) {
+			BookBiz bookBiz = new BookBizImpl();
+			pCounts= bookBiz.getBookPages(pageSize);
+		}
+		Map<String, Integer> map=new HashMap<String, Integer>();
+		map.put("pcount", pCounts);
+		JSONObject jsonStr=JSONObject.fromObject(map);
+		
+		PrintWriter out = response.getWriter();
+		out.write(jsonStr.toString());
+		out.flush();
+		out.close();
+	}
+
+}
